@@ -31,6 +31,8 @@ A public, searchable site of Portland City Council votes where visitors can:
 | `scripts/parse_agenda.py`, `scripts/add_votes.py` | Read an agenda page into structured items; append chosen items to the CSVs. See "How to work through the meetings". |
 | `scripts/validate_data.py` | Schema check for both CSVs. Run `python3 scripts/validate_data.py` before every commit that touches `data/`; CI runs it too. |
 
+**Cache busting:** the HTML pages load `assets/*.css`/`*.js` with a `?v=…` tag. GitHub Pages lets browsers cache those for 10 minutes, so bump the tag in all three HTML files whenever you change a CSS or JS file.
+
 Preview locally with `python3 -m http.server` and open http://localhost:8000 (opening `index.html` as a file won't load the CSV).
 
 ## Where the data comes from
