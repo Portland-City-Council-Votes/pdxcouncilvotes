@@ -68,7 +68,7 @@ Morillo,Avalos,Ryan,Pirtle-Guiney,Zimmerman,Dunphy,Smith,Green,Clark,Kanal,Novic
 - **date**: `YYYY-MM-DD`, the date of the final vote.
 - **doc_number**: the agenda's document number.
 - **title**: the official title as shown on the agenda.
-- **synopsis**: one or two plain-language sentences on what the item does. Written by Claude; keep it neutral and factual.
+- **synopsis**: one or two plain-language sentences on what the item does. Written by Claude; keep it neutral and say only what the agenda page supports (its title, fields and notes). No outside knowledge, examples or inferred motives: a Sept 2026 check had to strip claims like "such as foie gras" and "rather than staff".
 - **type**: `Ordinance`, `Emergency ordinance`, `Resolution` or `Report`.
 - **action**: the "Council action" field copied word for word (Passed, Passed as amended, Failed to pass, Adopted, Adopted as amended, Postponed, Referred, …).
 - **theme**: assigned by Claude, not an official City category. One or more of the fixed list below, separated by `; ` (e.g. `Public Safety; Transportation`). The list lives in `THEMES` in `scripts/add_votes.py` and both scripts enforce it; add a theme there only when nothing fits, and mention it to the user.
