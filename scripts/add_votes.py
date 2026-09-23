@@ -30,7 +30,8 @@ THEMES = {
     "Housing", "Homelessness", "Public Safety", "Transportation", "Budget & Taxes",
     "Environment & Energy", "Economic Development", "Land Use & Planning",
     "Utilities", "Parks & Recreation", "Arts & Culture", "Health & Social Services",
-    "Civil Rights & Equity", "Government Operations", "Government Transparency",
+    "Civil Rights & Equity", "Business Regulation", "Government Operations",
+    "Government Transparency",
 }
 
 

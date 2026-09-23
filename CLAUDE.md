@@ -70,7 +70,7 @@ Morillo,Avalos,Ryan,Pirtle-Guiney,Zimmerman,Dunphy,Smith,Green,Clark,Kanal,Novic
 - **type**: `Ordinance`, `Emergency ordinance`, `Resolution` or `Report`.
 - **action**: the "Council action" field copied word for word (Passed, Passed as amended, Failed to pass, Adopted, Adopted as amended, Postponed, Referred, …).
 - **theme**: assigned by Claude, not an official City category. One or more of the fixed list below, separated by `; ` (e.g. `Public Safety; Transportation`). The list lives in `THEMES` in `scripts/add_votes.py` and both scripts enforce it; add a theme there only when nothing fits, and mention it to the user.
-  - Housing · Homelessness · Public Safety · Transportation · Budget & Taxes · Environment & Energy · Economic Development · Land Use & Planning · Utilities (water, sewer, solid waste rates) · Parks & Recreation · Arts & Culture · Health & Social Services · Civil Rights & Equity · Government Operations · Government Transparency
+  - Housing · Homelessness · Public Safety · Transportation · Budget & Taxes · Environment & Energy · Economic Development · Land Use & Planning · Utilities (water, sewer, solid waste rates) · Parks & Recreation · Arts & Culture · Health & Social Services · Civil Rights & Equity · Business Regulation (rules for private businesses, e.g. rideshare, product bans) · Government Operations · Government Transparency
 - **neighborhood**: from the agenda page's own "Neighborhood" tag(s), several separated by `; `. If it lists all six areas (North/South/Northeast/Northwest/Southeast/Southwest), use `Citywide`. If the page has no neighborhood tag, use `Not specified in agenda`. Never guess a neighborhood from the item's subject.
 - **url**: the agenda page (or the item's own page) on portland.gov.
 - **Mayor tie-breaks**: the Mayor votes only to break a 6–6 tie. There is no Mayor column; say so in the synopsis (e.g. "Mayor Wilson broke a 6–6 tie by voting Nay.") via the pick's `note`.
@@ -95,8 +95,8 @@ Quote any field that contains a comma. Use Python's `csv` module to write rows r
 
 Working newest to oldest. `data/meetings.csv` is the source of truth; as of the last update:
 
-- **Done:** Sept 2, 9 and 16, 2026 (9 items logged in total across September).
+- **Done:** every meeting from May 18 through Sept 16, 2026.
 - **In progress:** Sept 23-24, 2026. Items 2026-277 and 2026-301 are logged; the rest (2026-278, 263 reconsideration, 186, 212, 300, 311, 312) had no final vote yet. Re-run it once the meeting is over; `add_votes.py` refuses duplicates.
-- **Next up:** Aug 12, 2026, then back through the list to Jan 2, 2025.
+- **Next up:** May 13, 2026, then back through the list to Jan 2, 2025.
 - An earlier session (outside this repo) processed Sept 9-23 and lost its data; that work has been redone here.
 - Known edge case: 2026-222 (July 22, 2026) failed 6-6 with Mayor Wilson breaking the tie by voting Nay. Log it with a `note`.
