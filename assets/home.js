@@ -13,6 +13,8 @@
       : "No votes have been added yet.";
   }
 
+  // Districts 3 and 4 were elected to two-year terms in 2024, so their seats are on the
+  // November 3, 2026 ballot (portland.gov/transition/advisory/questions/city-council-elections).
   function renderCouncilors(votes, councilors) {
     const root = document.getElementById("councilors");
     const byDistrict = new Map();
@@ -21,14 +23,23 @@
       if (!byDistrict.has(key)) byDistrict.set(key, []);
       byDistrict.get(key).push(c);
     });
+    const election = councilors.find((c) => c.next_election);
+    if (election) {
+      root.before(el("p", { class: "election-key" },
+        el("span", { class: "ring-sample", "aria-hidden": "true" }),
+        `Red ring: seat up for election on ${fmtDate(election.next_election, { month: "long", day: "numeric", year: "numeric" })}.`));
+    }
     byDistrict.forEach((list, district) => {
-      root.append(el("div", { class: "district" },
-        el("h3", {}, typeof district === "number" ? `District ${district}` : district),
+      const up = list.some((c) => c.next_election);
+      root.append(el("div", { class: "district" + (up ? " is-up" : "") },
+        el("h3", {}, typeof district === "number" ? `District ${district}` : district,
+          up ? el("span", { class: "up-tag" }, "On the ballot Nov. 3") : null),
         el("ul", { class: "people" }, list.map((c) => {
           const nays = votes.filter((r) => r[c.name] === "Nay").length;
+          const label = c.next_election ? `${c.full_name}, seat up for election ${fmtDate(c.next_election)}` : c.full_name;
           return el("li", {},
-            el("a", { class: "person", href: dataLink("councilor", c.name) },
-              c.photo ? el("img", { src: c.photo, alt: "", width: "128", height: "128", loading: "lazy" }) : null,
+            el("a", { class: "person" + (c.next_election ? " is-up" : ""), href: dataLink("councilor", c.name), "aria-label": `${label}: see every vote` },
+              c.photo ? el("img", { src: c.photo, alt: "", width: "150", height: "150", loading: "lazy" }) : null,
               el("span", { class: "person-name" }, c.full_name),
               el("span", { class: "person-meta" }, `${nays} Nay vote${nays === 1 ? "" : "s"}`)));
         }))

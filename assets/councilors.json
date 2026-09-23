@@ -53,7 +53,8 @@
   "district": 3,
   "slug": "tiffany-koyama-lane",
   "profile": "https://www.portland.gov/council/districts/3/tiffany-koyama-lane",
-  "photo": "assets/councilors/tiffany-koyama-lane.jpg"
+  "photo": "assets/councilors/tiffany-koyama-lane.jpg",
+  "next_election": "2026-11-03"
  },
  {
   "name": "Morillo",
@@ -61,7 +62,8 @@
   "district": 3,
   "slug": "angelita-morillo",
   "profile": "https://www.portland.gov/council/districts/3/angelita-morillo",
-  "photo": "assets/councilors/angelita-morillo.jpg"
+  "photo": "assets/councilors/angelita-morillo.jpg",
+  "next_election": "2026-11-03"
  },
  {
   "name": "Novick",
@@ -69,7 +71,8 @@
   "district": 3,
   "slug": "steve-novick",
   "profile": "https://www.portland.gov/council/districts/3/steve-novick",
-  "photo": "assets/councilors/steve-novick.jpg"
+  "photo": "assets/councilors/steve-novick.jpg",
+  "next_election": "2026-11-03"
  },
  {
   "name": "Clark",
@@ -77,7 +80,8 @@
   "district": 4,
   "slug": "olivia-clark",
   "profile": "https://www.portland.gov/council/districts/4/olivia-clark",
-  "photo": "assets/councilors/olivia-clark.jpg"
+  "photo": "assets/councilors/olivia-clark.jpg",
+  "next_election": "2026-11-03"
  },
  {
   "name": "Green",
@@ -85,7 +89,8 @@
   "district": 4,
   "slug": "mitch-green",
   "profile": "https://www.portland.gov/council/districts/4/mitch-green",
-  "photo": "assets/councilors/mitch-green.jpg"
+  "photo": "assets/councilors/mitch-green.jpg",
+  "next_election": "2026-11-03"
  },
  {
   "name": "Zimmerman",
@@ -93,6 +98,7 @@
   "district": 4,
   "slug": "eric-zimmerman",
   "profile": "https://www.portland.gov/council/districts/4/eric-zimmerman",
-  "photo": "assets/councilors/eric-zimmerman.jpg"
+  "photo": "assets/councilors/eric-zimmerman.jpg",
+  "next_election": "2026-11-03"
  }
 ]

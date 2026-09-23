@@ -109,6 +109,7 @@
       el("div", {},
         el("h2", {}, c.full_name),
         el("p", { class: "meta" }, c.district ? `District ${c.district} councilor` : "",
+          c.next_election ? el("span", { class: "up-tag" }, `Seat up for election ${fmtDate(c.next_election)}`) : null,
           c.profile ? [" · ", el("a", { href: c.profile, target: "_blank", rel: "noopener" }, "City profile")] : null),
         el("p", {}, `${counts.Yea} Yea · ${counts.Nay} Nay · ${counts.Absent} absent · ${counts.Abstain} abstain across ${rows.length} votes. ` +
           `On the losing side ${dissent} time${dissent === 1 ? "" : "s"}.`),
