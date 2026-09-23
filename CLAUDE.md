@@ -18,11 +18,12 @@ A public, searchable site of Portland City Council votes where visitors can:
 
 | Path | What it is |
 |---|---|
-| `index.html`, `assets/home.js` | Home page: explore by councilor (photos), neighborhood map, or theme; links into the data page with filters in the URL hash. |
+| `index.html`, `assets/home.js` | Home page: explore by councilor (photos) or theme; links into the data page with filters in the URL hash. (A neighborhood map was removed at the user's request: most items aren't tied to a neighborhood.) |
 | `data.html`, `assets/data.js` | Full table of every vote ("View all data"), frozen header row, councilors ordered by district. |
 | `assets/common.js`, `assets/style.css` | Shared data loading, theme icons and styles. |
 | `assets/councilors.json`, `assets/councilors/` | Councilor names, districts, official City portraits (from portland.gov/council). Update if the council changes. |
-| `assets/neighborhoods.json` | Simplified City of Portland neighborhood boundaries for the map. Agenda names are matched case-insensitively; add exceptions to `HOOD_ALIASES` in `common.js`. |
+| `data/motions.csv` | Every other recorded roll call (amendments, Budget Committee approvals, procedural motions, consent agendas). Generated; never edit by hand. |
+| `data/motion_parents.json`, `data/motion_themes.json` | Themes for motion parents that aren't in votes.csv, and extra subject themes for individual budget motions. |
 | `data/news.csv` | News coverage linked to voted items: `doc_number,outlet,headline,url`. |
 | `data/votes.csv` | The dataset, one row per major agenda item with a final vote. |
 | `data/meetings.csv` | Progress tracker, one row per meeting: date, agenda URL, `pending`/`done`/`cancelled`, items logged, notes. |
@@ -63,6 +64,12 @@ https://www.portland.gov/council/agenda/all?committee=950&page=N
 
 When unsure, include it. Filtering out noise later is cheaper than re-fetching pages for missed items.
 
+## `data/motions.csv`
+
+Built by `scripts/build_motions.py` from the notes on every agenda page: any line with a roll call like `(Aye (8): …; Nay (4): …)` that isn't the item's final "Votes" block. Columns: `date,doc_number,seq,item,kind,motion,note,theme,neighborhood,url` + councilors. `kind` is Amendment, Procedural or Motion (from the text). `motion` is quoted verbatim. Session-level roll calls (consent agenda, recesses) are filed under "Meeting business".
+
+The City's minutes have typos; the script handles them openly: merged names ("Ryan Zimmerman") are split, a councilor listed on both sides is left blank with a `note`, and count mismatches get a `note`. Amendment subjects usually live in separate amendment PDFs on efiles.portlandoregon.gov (not reachable from the cloud environment as of Sept 2026); only motions whose own text names a subject get extra themes via `data/motion_themes.json`.
+
 ## `data/news.csv` rules
 
 - Only link articles actually found (search results or the page itself) that are clearly about that item and vote. Never guess a URL or headline.
@@ -83,7 +90,7 @@ Morillo,Avalos,Ryan,Pirtle-Guiney,Zimmerman,Dunphy,Smith,Green,Clark,Kanal,Novic
 - **type**: `Ordinance`, `Emergency ordinance`, `Resolution` or `Report`.
 - **action**: the "Council action" field copied word for word (Passed, Passed as amended, Failed to pass, Adopted, Adopted as amended, Postponed, Referred, …).
 - **theme**: assigned by Claude, not an official City category. One or more of the fixed list below, separated by `; ` (e.g. `Public Safety; Transportation`). The list lives in `THEMES` in `scripts/add_votes.py` and both scripts enforce it; add a theme there only when nothing fits, and mention it to the user.
-  - Housing · Homelessness · Public Safety · Transportation · Budget & Taxes · Environment & Energy · Economic Development · Land Use & Planning · Utilities (water, sewer, solid waste rates) · Parks & Recreation · Arts & Culture · Health & Social Services · Civil Rights & Equity · Business Regulation (rules for private businesses, e.g. rideshare, product bans) · Government Operations · Government Transparency
+  - FY Budget (the annual budget process: approval, adoption, levies, supplemental budgets, technical adjustments and their amendments; always paired with the subject theme when the text names one) · Housing · Homelessness · Public Safety · Transportation · Budget & Taxes · Environment & Energy · Economic Development · Land Use & Planning · Utilities (water, sewer, solid waste rates) · Parks & Recreation · Arts & Culture · Health & Social Services · Civil Rights & Equity · Business Regulation (rules for private businesses, e.g. rideshare, product bans) · Government Operations · Government Transparency
 - **neighborhood**: from the agenda page's own "Neighborhood" tag(s), several separated by `; `. If it lists all six areas (North/South/Northeast/Northwest/Southeast/Southwest), use `Citywide`. If the page has no neighborhood tag, use `Not specified in agenda`. Never guess a neighborhood from the item's subject.
 - **url**: the agenda page (or the item's own page) on portland.gov.
 - **Mayor tie-breaks**: the Mayor votes only to break a 6–6 tie. There is no Mayor column; say so in the synopsis (e.g. "Mayor Wilson broke a 6–6 tie by voting Nay.") via the pick's `note`.
@@ -100,7 +107,8 @@ Quote any field that contains a comma. Use Python's `csv` module to write rows r
   1. `python3 scripts/parse_agenda.py <url> --json /tmp/m.json` prints every item with its type, final action, neighborhood and final vote (votes on amendments are ignored). It takes the votes straight from the page, so never retype them by hand.
   2. Decide which items are major, then write a picks file mapping each chosen document number to `{"synopsis": ..., "theme": ...}` (plus `note` for a Mayor tie-break).
   3. `python3 scripts/add_votes.py <meeting date> /tmp/m.json picks.json` appends the rows and marks the meeting done. Add `--in-progress` if the meeting hasn't finished yet (it stays pending and can be re-run for the remaining items later).
-  4. `python3 scripts/validate_data.py`, then commit and push. Small commits mean nothing is lost if a session ends.
+  4. `python3 scripts/build_motions.py` (from `scripts/`) to regenerate `data/motions.csv`; add a theme to `data/motion_parents.json` if it asks.
+  5. `python3 scripts/validate_data.py`, then commit and push. Small commits mean nothing is lost if a session ends.
 - An item "passed to second reading" gets its final vote at a later meeting, where it shows up as a "Second reading agenda item". Log it there.
 - The user expects this to take several sessions. Don't apologize for the pace; report progress plainly.
 
@@ -109,6 +117,7 @@ Quote any field that contains a comma. Use Python's `csv` module to write rows r
 `data/meetings.csv` is the source of truth. As of Sept 23, 2026:
 
 - **Done:** every meeting from Jan 2, 2025 through Sept 16, 2026 (64 meetings, 199 major items, 69 of them split votes).
+- **Motions:** 338 roll calls across all 65 held meetings (Jan 2025 - Sept 2026) are in `data/motions.csv`.
 - **In progress:** Sept 23-24, 2026. Items 2026-277 and 2026-301 are logged; the rest (2026-278, 263 reconsideration, 186, 212, 300, 311, 312) had no final vote yet. Re-run it once the meeting is over; `add_votes.py` refuses duplicates.
 - **Ongoing:** add new meetings from the `agenda/all` listing as they happen.
 - Mayor tie-break so far: 2026-222 (July 22, 2026), logged with a note in its synopsis.

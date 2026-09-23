@@ -1,0 +1,11 @@
+{
+  "_about": "Extra themes for individual roll calls whose own text names a subject, added to the parent item's themes. Key: date|doc_number|seq. 'starts' must match the start of the motion text, so a changed parse can't silently mis-tag.",
+  "2025-01-15|2025-007|1": {"starts": "Motion to amend Directive A.1 to replace City Administrator's Office", "theme": "Government Operations"},
+  "2025-04-16|2025-120|2": {"starts": "Motion to make adjustments to the supplemental budget as proposed to change General Fund return", "theme": "Public Safety"},
+  "2025-06-18|2025-228|1": {"starts": "Motion to decrease FY24-25 General Fund Bureau Program Expense for the Portland Police Bureau", "theme": "Public Safety"},
+  "2026-05-18|2026-157|3": {"starts": "Motion to make Parks budget correction", "theme": "Parks & Recreation"},
+  "2026-06-10|2026-196|1": {"starts": "Motion to make a technical amendment to align with Arts Tax ordinance", "theme": "Arts & Culture"},
+  "2026-07-15|2026-223|2": {"starts": "Vote called on Senior Center Project", "theme": "Health & Social Services"},
+  "2026-07-15|2026-223|3": {"starts": "Vote called on International Relations Program", "theme": "Government Operations"},
+  "2026-07-15|2026-223|4": {"starts": "Vote called on Ceasefire Coordinator", "theme": "Public Safety"}
+}

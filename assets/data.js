@@ -6,13 +6,15 @@
 
   const { loadAll, el, fmtDate } = window.PCV;
   const VOTE_ABBR = { Yea: "Y", Nay: "N", Absent: "A", Abstain: "Ab" };
-  const FILTER_IDS = ["q", "theme", "neighborhood", "councilor", "vote", "sort", "contested"];
+  const FILTER_IDS = ["q", "theme", "show", "councilor", "vote", "sort", "contested"];
+  const WIDE = ["Citywide", "Not specified in agenda"];
 
   const els = Object.fromEntries(
     FILTER_IDS.concat(["filters", "results", "summary", "banner"]).map((id) => [id, document.getElementById(id)])
   );
 
   let rows = [];
+  let motions = [];
   let councilors = [];
 
   function fillSelect(select, options) {
@@ -27,7 +29,7 @@
     return {
       q: els.q.value.trim().toLowerCase(),
       theme: els.theme.value,
-      neighborhood: els.neighborhood.value,
+      show: els.show.value,
       councilor: els.councilor.value,
       vote: els.vote.value,
       sort: els.sort.value,
@@ -38,7 +40,6 @@
   function matches(r, f) {
     if (f.q && !r.haystack.includes(f.q)) return false;
     if (f.theme && !r.themes.includes(f.theme)) return false;
-    if (f.neighborhood && !r.neighborhoods.includes(f.neighborhood)) return false;
     if (f.contested && !r.split) return false;
     if (f.vote) {
       const pool = f.councilor ? r.votes.filter((v) => v.name === f.councilor) : r.votes;
@@ -81,6 +82,12 @@
     return parts.join(", ");
   }
 
+  function pool(show) {
+    if (show === "motions") return motions;
+    if (show === "all") return rows.concat(motions);
+    return rows;
+  }
+
   function renderBanner(f) {
     const c = councilors.find((x) => x.name === f.councilor);
     els.banner.hidden = !c;
@@ -95,6 +102,8 @@
       const passed = r.tally.Yea > r.tally.Nay;
       if ((v === "Nay" && passed) || (v === "Yea" && !passed && r.tally.Nay > 0)) dissent++;
     });
+    const mCounts = { Yea: 0, Nay: 0 };
+    motions.forEach((r) => { if (r[c.name] in mCounts) mCounts[r[c.name]]++; });
     els.banner.append(
       c.photo ? el("img", { src: c.photo, alt: "", width: "72", height: "72" }) : null,
       el("div", {},
@@ -102,26 +111,38 @@
         el("p", { class: "meta" }, c.district ? `District ${c.district} councilor` : "",
           c.profile ? [" · ", el("a", { href: c.profile, target: "_blank", rel: "noopener" }, "City profile")] : null),
         el("p", {}, `${counts.Yea} Yea · ${counts.Nay} Nay · ${counts.Absent} absent · ${counts.Abstain} abstain across ${rows.length} votes. ` +
-          `On the losing side ${dissent} time${dissent === 1 ? "" : "s"}.`)
+          `On the losing side ${dissent} time${dissent === 1 ? "" : "s"}.`),
+        motions.length ? el("p", { class: "meta" },
+          `On amendments and motions: ${mCounts.Yea} Yea, ${mCounts.Nay} Nay across ${motions.length} roll calls.`) : null
       )
     );
   }
 
   function renderRow(r, focus) {
-    const item = el("td", { class: "c-item" },
-      el("a", { href: r.url, class: "item-title", target: "_blank", rel: "noopener" }, r.title),
-      r.synopsis ? el("p", { class: "synopsis" }, r.synopsis) : null,
-      el("p", { class: "meta" }, [r.doc_number, r.type, r.action].filter(Boolean).join(" · ")),
-      r.news.length ? el("ul", { class: "news" },
-        r.news.map((n) => el("li", {},
-          el("a", { href: n.url, target: "_blank", rel: "noopener" }, n.headline),
-          el("span", { class: "outlet" }, " — " + n.outlet)))) : null
-    );
+    const isMotion = r.kind !== "Final vote";
+    const item = isMotion
+      ? el("td", { class: "c-item" },
+          el("span", { class: "kind kind-" + r.kind.toLowerCase() }, r.kind),
+          el("p", { class: "motion" }, r.motion),
+          r.note ? el("p", { class: "note" }, r.note) : null,
+          el("p", { class: "meta" }, "On: ",
+            el("a", { href: r.url, target: "_blank", rel: "noopener" }, r.item),
+            r.doc_number ? ` (${r.doc_number})` : ""))
+      : el("td", { class: "c-item" },
+          el("a", { href: r.url, class: "item-title", target: "_blank", rel: "noopener" }, r.title),
+          r.synopsis ? el("p", { class: "synopsis" }, r.synopsis) : null,
+          el("p", { class: "meta" }, [r.doc_number, r.type, r.action].filter(Boolean).join(" · ")),
+          r.news.length ? el("ul", { class: "news" },
+            r.news.map((n) => el("li", {},
+              el("a", { href: n.url, target: "_blank", rel: "noopener" }, n.headline),
+              el("span", { class: "outlet" }, " — " + n.outlet)))) : null
+        );
     const tags = (list, cls) => list.map((t) => el("span", { class: "tag " + cls }, t));
     const cells = [
       el("td", { class: "c-date" }, el("time", { datetime: r.date }, fmtDate(r.date))),
       item,
-      el("td", { class: "c-tags" }, tags(r.themes, "tag-theme"), tags(r.neighborhoods, "tag-place")),
+      el("td", { class: "c-tags" }, tags(r.themes, "tag-theme"),
+        tags(r.neighborhoods.filter((n) => !WIDE.includes(n)), "tag-place")),
       el("td", { class: "c-tally" + (r.split ? " is-split" : "") }, tallyText(r.tally)),
     ];
     r.votes.forEach((v, i) => {
@@ -134,19 +155,23 @@
         el("span", { class: "sr-only" }, v.vote || "no vote recorded")
       ));
     });
-    return el("tr", { class: r.split ? "is-split" : "" }, cells);
+    return el("tr", { class: (r.split ? "is-split" : "") + (isMotion ? " is-motion" : "") }, cells);
   }
 
   function render() {
     const f = readFilters();
     writeHash(f);
     renderBanner(f);
-    const list = rows.filter((r) => matches(r, f));
-    list.sort((a, b) => (f.sort === "oldest" ? 1 : -1) * a.date.localeCompare(b.date));
+    const all = pool(f.show);
+    const list = all.filter((r) => matches(r, f));
+    // Newest first; within a day keep final votes after the motions that led to them.
+    list.sort((a, b) => (f.sort === "oldest" ? 1 : -1) * (a.date.localeCompare(b.date) ||
+      (a.kind === "Final vote") - (b.kind === "Final vote") || (+a.seq || 0) - (+b.seq || 0)));
 
-    const total = rows.length;
+    const total = all.length;
+    const noun = f.show === "motions" ? "amendment and motion votes" : f.show === "all" ? "votes (final, amendments and motions)" : "final votes";
     els.summary.textContent = total
-      ? `Showing ${list.length} of ${total} votes.`
+      ? `Showing ${list.length} of ${total} ${noun}.`
       : "No votes have been added yet. Data collection is in progress.";
 
     els.results.replaceChildren();
@@ -160,7 +185,7 @@
     const head = el("tr", {},
       el("th", { scope: "col", class: "c-date" }, "Date"),
       el("th", { scope: "col", class: "c-item" }, "Item"),
-      el("th", { scope: "col", class: "c-tags" }, "Theme / Area"),
+      el("th", { scope: "col", class: "c-tags" }, "Theme"),
       el("th", { scope: "col", class: "c-tally" }, "Yea–Nay"),
       councilors.map((c, i) => {
         const first = i === 0 || councilors[i - 1].district !== c.district;
@@ -179,13 +204,12 @@
 
   async function load() {
     try {
-      ({ votes: rows, councilors } = await loadAll());
+      ({ votes: rows, motions, councilors } = await loadAll());
     } catch (err) {
       els.summary.textContent = "Couldn't load the vote data (" + err.message + ").";
       return;
     }
-    fillSelect(els.theme, uniqueSorted(rows.map((r) => r.themes)).map((t) => [t, t]));
-    fillSelect(els.neighborhood, uniqueSorted(rows.map((r) => r.neighborhoods)).map((n) => [n, n]));
+    fillSelect(els.theme, uniqueSorted(rows.concat(motions).map((r) => r.themes)).map((t) => [t, t]));
     fillSelect(els.councilor, councilors.map((c) => [c.name, c.district ? `${c.full_name} (District ${c.district})` : c.full_name]));
     readHash();
     render();

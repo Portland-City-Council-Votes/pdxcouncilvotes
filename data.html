@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>All Votes · Portland Council Votes</title>
-  <meta name="description" content="Every major Portland City Council vote since January 2025, with how each of the 12 councilors voted.">
+  <meta name="description" content="Every major Portland City Council vote since January 2025, plus every amendment and motion roll call, with how each of the 12 councilors voted.">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -29,15 +29,19 @@
     <form class="filters" id="filters" role="search" aria-label="Filter votes">
       <label class="field field-search">
         <span>Search</span>
-        <input type="search" id="q" name="q" placeholder="Title, synopsis, headline or document number" autocomplete="off">
+        <input type="search" id="q" name="q" placeholder="Title, synopsis, motion text or document number" autocomplete="off">
       </label>
       <label class="field">
         <span>Theme</span>
         <select id="theme" name="theme"><option value="">All themes</option></select>
       </label>
       <label class="field">
-        <span>Neighborhood</span>
-        <select id="neighborhood" name="neighborhood"><option value="">All neighborhoods</option></select>
+        <span>Show</span>
+        <select id="show" name="show">
+          <option value="">Final votes</option>
+          <option value="motions">Amendments &amp; motions</option>
+          <option value="all">Both</option>
+        </select>
       </label>
       <label class="field">
         <span>Councilor</span>
@@ -71,8 +75,8 @@
   </main>
 
   <footer class="site-footer wrap">
-    <p>Source: meeting agendas at <a href="https://www.portland.gov/council/agenda/all?committee=950">portland.gov/council</a>. Synopses, themes and the choice of which items count as “major” are this site’s own editorial calls, not official City categories. Routine business such as appointments, settlements under $1 million and contract awards is left out unless the vote was split. News links go to independent coverage of each item.</p>
-    <p><a href="data/votes.csv" download>Download the full dataset (CSV)</a></p>
+    <p>Source: meeting agendas at <a href="https://www.portland.gov/council/agenda/all?committee=950">portland.gov/council</a>. Synopses, themes and the choice of which items count as “major” are this site’s own editorial calls, not official City categories. Routine business such as appointments, settlements under $1 million and contract awards is left out unless the vote was split. Amendment and motion votes are every roll call recorded in the minutes other than an item’s final vote, quoted as written. News links go to independent coverage of each item.</p>
+    <p>Download: <a href="data/votes.csv" download>final votes (CSV)</a> · <a href="data/motions.csv" download>amendment and motion votes (CSV)</a></p>
   </footer>
 
   <script src="assets/common.js"></script>

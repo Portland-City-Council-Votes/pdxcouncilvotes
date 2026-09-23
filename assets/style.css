@@ -20,9 +20,6 @@
   --other-fg: #6b6a65;
   --split: #b5561f;
   --focus-ring: #1f5f7a;
-  --map-empty: #e7e5de;
-  --map-line: #ffffff;
-  --map-fill: 31 95 122;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -47,9 +44,6 @@
     --other-fg: #a3a8ad;
     --split: #f0a06c;
     --focus-ring: #7fbfd9;
-    --map-empty: #2a2f34;
-    --map-line: #14171a;
-    --map-fill: 127 191 217;
   }
 }
 
@@ -203,72 +197,6 @@ a { color: var(--accent); }
 .person-name { font-weight: 600; font-size: 0.9rem; line-height: 1.25; }
 .person-meta { font-size: 0.78rem; color: var(--muted); }
 
-/* Map */
-.map-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
-  gap: 20px;
-  align-items: start;
-}
-.map-wrap {
-  position: relative;
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  padding: 12px;
-}
-#map { display: block; width: 100%; height: auto; }
-.hood {
-  fill: var(--map-empty);
-  stroke: var(--map-line);
-  stroke-width: 0.8;
-}
-.hood.shared { fill-opacity: 0.6; }
-.hood.has-votes {
-  fill: rgb(var(--map-fill) / var(--level, 0.6));
-  cursor: pointer;
-}
-.hood.has-votes:hover, a:focus-visible .hood { stroke: var(--text); stroke-width: 1.6; }
-.map-tip {
-  position: absolute;
-  pointer-events: none;
-  padding: 4px 8px;
-  border-radius: 6px;
-  background: var(--text);
-  color: var(--bg);
-  font-size: 0.8rem;
-  white-space: nowrap;
-}
-.map-side h3 {
-  margin: 18px 0 8px;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--muted);
-}
-.map-wide { display: flex; flex-direction: column; gap: 8px; }
-.wide-link {
-  display: block;
-  padding: 10px 12px;
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  text-decoration: none;
-  color: var(--text);
-}
-.wide-link strong { color: var(--accent); font-size: 1.1rem; }
-.wide-link:hover { border-color: var(--accent); }
-.hood-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  columns: 2;
-  column-gap: 16px;
-  font-size: 0.9rem;
-}
-.hood-list li { break-inside: avoid; padding: 2px 0; }
-.hood-list .count { color: var(--muted); }
-
 /* Themes */
 .theme-grid {
   display: grid;
@@ -418,6 +346,22 @@ input[type="search"], select {
 .c-tally.is-split { color: var(--split); font-weight: 600; }
 
 .item-title { font-weight: 600; text-decoration: none; }
+.kind {
+  display: inline-block;
+  margin-bottom: 4px;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--other-bg);
+  color: var(--other-fg);
+}
+.kind-amendment { background: var(--accent-soft); color: var(--accent); }
+.motion { margin: 0; }
+.note { margin: 4px 0 0; font-size: 0.85rem; font-style: italic; color: var(--split); }
+.votes tr.is-motion td { background: color-mix(in srgb, var(--bg) 45%, var(--surface)); }
 .item-title:hover { text-decoration: underline; }
 .synopsis { margin: 4px 0 0; }
 .meta { margin: 4px 0 0; font-size: 0.82rem; color: var(--muted); }
@@ -483,7 +427,6 @@ input[type="search"], select {
 
 /* Tablets and phones */
 @media (max-width: 860px) {
-  .map-layout { grid-template-columns: 1fr; }
 }
 
 /* Phones: each vote becomes a card, councilor votes wrap as labelled chips. */

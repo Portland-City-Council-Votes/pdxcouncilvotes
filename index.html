@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Portland Council Votes</title>
-  <meta name="description" content="See how Portland's 12 city councilors voted since January 2025. Explore by councilor, neighborhood or theme.">
+  <meta name="description" content="See how Portland's 12 city councilors voted since January 2025. Explore by councilor or theme.">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -19,7 +19,7 @@
   <header class="hero">
     <div class="wrap">
       <h1>How did Portland’s City Council vote?</h1>
-      <p class="lede">Every major vote of the 12-member council since it took office in January 2025. Pick a councilor, a neighborhood or a theme to see the votes behind it.</p>
+      <p class="lede">Every major vote of the 12-member council since it took office in January 2025. Pick a councilor or a theme to see the votes behind it, including amendments and budget votes.</p>
       <p class="stats" id="stats" aria-live="polite">Loading votes…</p>
       <a class="button" href="data.html">View all data</a>
     </div>
@@ -30,22 +30,6 @@
       <h2 id="h-councilors">By councilor</h2>
       <p class="section-lede">Choose a councilor to see every vote they cast.</p>
       <div id="councilors" class="districts"></div>
-    </section>
-
-    <section class="explore" aria-labelledby="h-map">
-      <h2 id="h-map">By neighborhood</h2>
-      <p class="section-lede">Choose a shaded neighborhood to see items the agenda tagged to it. Most items affect the whole city, and some aren’t tagged to any area.</p>
-      <div class="map-layout">
-        <div class="map-wrap">
-          <svg id="map" role="img" aria-label="Map of Portland neighborhoods; shaded neighborhoods have votes"></svg>
-          <div class="map-tip" id="map-tip" hidden></div>
-        </div>
-        <div class="map-side">
-          <div class="map-wide" id="map-wide"></div>
-          <h3>Tagged neighborhoods</h3>
-          <ul class="hood-list" id="hood-list"></ul>
-        </div>
-      </div>
     </section>
 
     <section class="explore" aria-labelledby="h-themes">
@@ -62,7 +46,7 @@
   </main>
 
   <footer class="site-footer wrap">
-    <p>Source: meeting agendas at <a href="https://www.portland.gov/council/agenda/all?committee=950">portland.gov/council</a>. Councilor photos are official City of Portland portraits. Neighborhood boundaries: City of Portland. Synopses, themes and the choice of which items count as “major” are this site’s own editorial calls.</p>
+    <p>Source: meeting agendas at <a href="https://www.portland.gov/council/agenda/all?committee=950">portland.gov/council</a>. Councilor photos are official City of Portland portraits. Synopses, themes and the choice of which items count as “major” are this site’s own editorial calls.</p>
     <p><a href="data.html">View all data</a> · <a href="data/votes.csv" download>Download the dataset (CSV)</a></p>
   </footer>
 

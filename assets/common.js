@@ -53,10 +53,11 @@
   // Loads votes, councilors and news. Councilor columns follow councilors.json
   // (ordered by district); any extra column in the CSV is appended after them.
   async function loadAll() {
-    const [votesText, councilorList, newsText] = await Promise.all([
+    const [votesText, councilorList, newsText, motionsText] = await Promise.all([
       fetchText("data/votes.csv"),
       fetchJSON("assets/councilors.json"),
       fetchText("data/news.csv").catch(() => ""),
+      fetchText("data/motions.csv").catch(() => ""),
     ]);
     const { header, rows } = csvObjects(votesText);
     const csvNames = header.slice(header.indexOf("url") + 1);
@@ -72,26 +73,35 @@
       });
     }
 
-    const votes = rows.map((r) => {
-      r.themes = splitList(r.theme);
-      r.neighborhoods = splitList(r.neighborhood);
+    function tally(r) {
       r.votes = councilors.map((c) => ({ name: c.name, vote: r[c.name] }));
       r.tally = { Yea: 0, Nay: 0, Absent: 0, Abstain: 0 };
       r.votes.forEach((v) => { if (v.vote in r.tally) r.tally[v.vote]++; });
       r.split = r.tally.Yea > 0 && r.tally.Nay > 0;
+      r.themes = splitList(r.theme);
+      r.neighborhoods = splitList(r.neighborhood);
+      return r;
+    }
+
+    const votes = rows.map((r) => {
+      tally(r);
+      r.kind = "Final vote";
       r.news = news.get(r.doc_number) || [];
       r.haystack = [r.title, r.synopsis, r.doc_number, r.action, ...r.news.map((n) => n.headline)]
         .join(" ").toLowerCase();
       return r;
     });
-    return { votes, councilors };
-  }
 
-  // Agenda neighborhood names mostly match the City's boundary file; these are the exceptions.
-  const HOOD_ALIASES = { "lloyd": "lloyd district", "old town": "old town/chinatown" };
-  function hoodKey(name) {
-    const k = name.toLowerCase().replace(/^mount /, "mt. ").trim();
-    return HOOD_ALIASES[k] || k;
+    // Roll calls on amendments and other motions; they share the parent item's news.
+    const motions = motionsText ? csvObjects(motionsText).rows.map((r) => {
+      tally(r);
+      r.title = r.item;
+      r.news = [];
+      r.haystack = [r.motion, r.item, r.doc_number, r.note].join(" ").toLowerCase();
+      return r;
+    }) : [];
+
+    return { votes, motions, councilors };
   }
 
   // Line icons for each theme (24x24, drawn with currentColor).
@@ -100,6 +110,7 @@
     "Homelessness": '<path d="M12 4 3 20h18L12 4Z"/><path d="M12 4v16"/><path d="m9.5 20 2.5-5 2.5 5"/>',
     "Public Safety": '<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.1 7.5 9.5 4.4-1.4 7.5-4.9 7.5-9.5V6L12 3Z"/><path d="m9 12 2 2 4-4"/>',
     "Transportation": '<rect x="5" y="3" width="14" height="14" rx="2"/><path d="M5 11h14"/><path d="M7 17v3M17 17v3"/><circle cx="8.5" cy="14" r=".6"/><circle cx="15.5" cy="14" r=".6"/>',
+    "FY Budget": '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M14 12.8c-.4-.5-1.1-.8-1.9-.8-1.1 0-1.9.6-1.9 1.4 0 1.9 3.9 1 3.9 2.9 0 .8-.8 1.4-2 1.4-.9 0-1.6-.3-2-.9M12.1 11v.9M12.1 17.7v.8"/>',
     "Budget & Taxes": '<circle cx="12" cy="12" r="9"/><path d="M15 8.5c-.6-.9-1.7-1.5-3-1.5-1.9 0-3 1-3 2.3 0 3.2 6 1.7 6 5 0 1.3-1.2 2.4-3 2.4-1.4 0-2.6-.6-3.2-1.6"/><path d="M12 5.5v1.5M12 17v1.5"/>',
     "Environment & Energy": '<path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14Z"/><path d="M5 19c3-4 6-7 10-9"/>',
     "Economic Development": '<path d="M3 20h18"/><path d="m4 15 5-5 4 3 7-7"/><path d="M15 6h5v5"/>',
@@ -140,5 +151,5 @@
   // Links into the full data page with a filter applied.
   const dataLink = (key, value) => "data.html#" + new URLSearchParams({ [key]: value }).toString();
 
-  window.PCV = { parseCSV, splitList, loadAll, fetchJSON, hoodKey, themeIcon, el, fmtDate, dataLink };
+  window.PCV = { parseCSV, splitList, loadAll, fetchJSON, themeIcon, el, fmtDate, dataLink };
 })();

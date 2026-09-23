@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 VOTES = ROOT / "data" / "votes.csv"
 MEETINGS = ROOT / "data" / "meetings.csv"
 THEMES = {
-    "Housing", "Homelessness", "Public Safety", "Transportation", "Budget & Taxes",
+    "Housing", "Homelessness", "Public Safety", "Transportation", "Budget & Taxes", "FY Budget",
     "Environment & Energy", "Economic Development", "Land Use & Planning",
     "Utilities", "Parks & Recreation", "Arts & Culture", "Health & Social Services",
     "Civil Rights & Equity", "Business Regulation", "Government Operations",

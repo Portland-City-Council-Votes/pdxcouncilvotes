@@ -94,6 +94,42 @@ def check_meetings(errors):
                 errors.append(f"{where}: a done meeting needs items_logged (a number, 0 is fine)")
 
 
+def check_motions(errors):
+    path = ROOT / "data" / "motions.csv"
+    expected = ["date", "doc_number", "seq", "item", "kind", "motion", "note", "theme",
+                "neighborhood", "url"] + COUNCILORS
+    with path.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        if reader.fieldnames != expected:
+            errors.append(f"{path.name}: header must be exactly: {','.join(expected)}")
+            return
+        seen = set()
+        for line, row in enumerate(reader, start=2):
+            where = f"{path.name}:{line}"
+            if parse_date(row["date"]) is None:
+                errors.append(f"{where}: date {row['date']!r} is not YYYY-MM-DD")
+            if row["kind"] not in {"Amendment", "Procedural", "Motion"}:
+                errors.append(f"{where}: kind {row['kind']!r} not Amendment/Procedural/Motion")
+            if not row["motion"].strip() or not row["item"].strip():
+                errors.append(f"{where}: motion and item are required")
+            bad_themes = [t for t in row["theme"].split("; ") if t not in THEMES]
+            if bad_themes:
+                errors.append(f"{where}: unknown theme(s) {bad_themes}")
+            if not AGENDA_URL.match(row["url"]):
+                errors.append(f"{where}: url should point at portland.gov/council/...")
+            key = (row["date"], row["doc_number"] or row["item"], row["seq"])
+            if key in seen:
+                errors.append(f"{where}: duplicate roll call {key}")
+            seen.add(key)
+            recorded = 0
+            for name in COUNCILORS:
+                if row[name] not in VOTES:
+                    errors.append(f"{where}: {name} vote {row[name]!r} not one of Yea/Nay/Absent/Abstain/blank")
+                recorded += bool(row[name])
+            if recorded < 12 and not row["note"]:
+                errors.append(f"{where}: {12 - recorded} councilor(s) blank without a note explaining why")
+
+
 def check_news(errors):
     path = ROOT / "data" / "news.csv"
     with (ROOT / "data" / "votes.csv").open(newline="", encoding="utf-8") as f:
@@ -123,6 +159,7 @@ def main():
     errors = []
     check_votes(errors)
     check_meetings(errors)
+    check_motions(errors)
     check_news(errors)
     if errors:
         print("\n".join(errors))
