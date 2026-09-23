@@ -148,7 +148,7 @@ a { color: var(--accent); }
 
 /* Home: sections */
 .explore { margin: 40px 0; }
-.explore h2 { margin: 0; font-size: 1.35rem; }
+.explore h2 { margin: 0; font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -0.01em; }
 .section-lede { margin: 4px 0 18px; color: var(--muted); max-width: 70ch; }
 
 /* Councilors */
