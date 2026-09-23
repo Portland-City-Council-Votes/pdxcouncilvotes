@@ -70,8 +70,8 @@ def check_meetings(errors):
     path = ROOT / "data" / "meetings.csv"
     with path.open(newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        if reader.fieldnames != ["date", "status", "items_logged", "notes"]:
-            errors.append(f"{path.name}: header must be exactly: date,status,items_logged,notes")
+        if reader.fieldnames != ["date", "url", "status", "items_logged", "notes"]:
+            errors.append(f"{path.name}: header must be exactly: date,url,status,items_logged,notes")
             return
         seen = set()
         for line, row in enumerate(reader, start=2):
@@ -81,6 +81,8 @@ def check_meetings(errors):
             if row["date"] in seen:
                 errors.append(f"{where}: duplicate meeting date {row['date']}")
             seen.add(row["date"])
+            if not AGENDA_URL.match(row["url"]):
+                errors.append(f"{where}: url should point at portland.gov/council/...")
             if row["status"] not in MEETING_STATUSES:
                 errors.append(f"{where}: status {row['status']!r} not one of {sorted(MEETING_STATUSES)}")
             if row["status"] == "done" and not row["items_logged"].isdigit():

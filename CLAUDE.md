@@ -12,7 +12,7 @@ A public, searchable site of Portland City Council votes where visitors can:
 
 **Decided (Sept 2026):** a static site served by GitHub Pages from this repo. No build step, no backend. `index.html` + `assets/app.js` load `data/votes.csv` and filter in the browser.
 
-**Scope (Sept 2026):** every full-council meeting since the 12-member council took office in **January 2025** through the present, not just the last year.
+**Scope (Sept 2026):** every full-council meeting since the 12-member council's first meeting on **January 2, 2025** through the present, not just the last year.
 
 ## Layout
 
@@ -20,7 +20,7 @@ A public, searchable site of Portland City Council votes where visitors can:
 |---|---|
 | `index.html`, `assets/` | The site. Councilor columns come from the CSV header, so the page needs no change when data is added. |
 | `data/votes.csv` | The dataset, one row per major agenda item with a final vote. |
-| `data/meetings.csv` | Progress tracker, one row per meeting date: `pending`, `done` or `cancelled`. |
+| `data/meetings.csv` | Progress tracker, one row per meeting: date, agenda URL, `pending`/`done`/`cancelled`, items logged, notes. |
 | `scripts/validate_data.py` | Schema check for both CSVs. Run `python3 scripts/validate_data.py` before every commit that touches `data/`; CI runs it too. |
 
 Preview locally with `python3 -m http.server` and open http://localhost:8000 (opening `index.html` as a file won't load the CSV).
@@ -77,11 +77,13 @@ Quote any field that contains a comma. Use Python's `csv` module to write rows r
 
 ## How to work through the meetings
 
-- Fill `data/meetings.csv` with every meeting date from the `agenda/all` listing (January 2025 onward) as `pending`. Nov 5, 2025 was cancelled.
+- `data/meetings.csv` lists every full-council meeting since the 12-member council's first meeting on Jan 2, 2025 (66 as of Sept 23, 2026; Nov 5, 2025 was cancelled). Use its `url` column rather than building URLs from dates: some differ (e.g. `2025/11/12-0`). Add new meetings from the `agenda/all` listing as they appear.
+- Many meetings run over two or more days on one agenda page (e.g. "September 23-24, 2026"). In `votes.csv`, `date` is the day the vote happened when the page shows it, otherwise the meeting's first day.
+- The listing pages sometimes return "The website encountered an unexpected error"; wait a few seconds and retry.
 - Fetch one agenda page at a time and read it carefully; the reading is the slow part, not the fetch.
 - After each meeting: append its rows to `data/votes.csv`, mark it `done` with `items_logged`, run the validator, then commit and push. Small commits mean nothing is lost if a session ends.
 - The user expects this to take several sessions. Don't apologize for the pace; report progress plainly.
 
 ## Progress
 
-An earlier session (outside this repo) processed Sept 9, 16 and 23, 2026 and logged 9 items, but that data was lost with its container. Those three meetings are back to `pending`. No meetings are finished in this repo yet; see `data/meetings.csv` for the current state.
+An earlier session (outside this repo) processed Sept 9, 16 and 23, 2026 and logged 9 items, but that data was lost with its container, so those meetings are back to `pending`. The full meeting list is in place; no meetings are finished yet. `data/meetings.csv` is the current state.
