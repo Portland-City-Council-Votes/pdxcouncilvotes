@@ -1,0 +1,151 @@
+{
+  "_about": "Adopted budget figures, copied from the City of Portland's adopted budget pages and budget books. Every number cites its source; don't add figures without one.",
+  "years": [
+    {
+      "fy": "FY 2026-27",
+      "period": "July 1, 2026 – June 30, 2027",
+      "adopted": "2026-06-17",
+      "adoption_doc": "2026-196",
+      "approval_doc": "2026-157",
+      "source_page": "https://www.portland.gov/budget/2026-2027-budget/development/adopted",
+      "source_book": "https://www.portland.gov/budget/2026-2027-budget/documents/fy-26-27-adopted-budget-book-volume-1-0/download",
+      "headline": {
+        "total_budget": 8550000000,
+        "program_expenses": 4480000000,
+        "general_fund_discretionary": 803400000,
+        "_source": "Adopted budget page: '$8.55 billion total budget', '$4.48 billion in program expenses', '$803.4 million in General Fund discretionary'."
+      },
+      "expenses_by_service_area": {
+        "_source": "Budget book Vol. 1, p. 29, Figure 9: Total City Bureau Expenses - Requirements by Service Area",
+        "total": 4484113529,
+        "items": {
+          "Public Works": 2038172785,
+          "City Operations": 820897837,
+          "Community & Economic Development": 690205363,
+          "Public Safety": 616503210,
+          "City Administrator": 279392757,
+          "City Council": 20816116,
+          "Office of the City Auditor": 14599982,
+          "Office of the Mayor": 3525479
+        }
+      },
+      "general_fund_by_service_area": {
+        "_source": "Budget book Vol. 1, p. 30, Figure 10: General Fund - Requirements by Service Area",
+        "total": 1186002037,
+        "items": {
+          "Public Safety": 560861338,
+          "City Administrator": 234666519,
+          "Public Works": 199924015,
+          "City Operations": 91268628,
+          "Community & Economic Development": 60339960,
+          "City Council": 20816116,
+          "Office of the City Auditor": 14599982,
+          "Office of the Mayor": 3525479
+        }
+      },
+      "general_fund_resources": {
+        "_source": "Budget book Vol. 1, pp. 30-31, Figure 11: General Fund - Resource by Major Category",
+        "total": 1186002037,
+        "items": {
+          "Transfers from Other Funds": 376442350,
+          "Property Taxes": 365500000,
+          "Business Licenses": 217800000,
+          "Utility License Fees": 111500000,
+          "Intergovernmental": 49258937,
+          "Service Charges & Other": 35200750,
+          "Lodging Taxes": 26000000,
+          "Beginning Fund Balance": 4300000
+        }
+      },
+      "city_resources": {
+        "_source": "Budget book Vol. 1, p. 29: City resources (external revenues plus beginning fund balance)",
+        "total": 6470343829,
+        "items": {
+          "Beginning Fund Balance": 2264623032,
+          "Charges for Services": 1195613486,
+          "Taxes": 1077279623,
+          "Bond & Note Proceeds": 958775428,
+          "Licenses & Permits": 450414908,
+          "Intergovernmental": 389223813,
+          "Miscellaneous": 134413539
+        }
+      }
+    },
+    {
+      "fy": "FY 2025-26",
+      "period": "July 1, 2025 – June 30, 2026",
+      "adopted": "2025-06-18",
+      "adoption_doc": "2025-240",
+      "approval_doc": "2025-208",
+      "source_page": "https://www.portland.gov/budget/2025-2026-budget/development/adopted",
+      "source_book": "https://www.portland.gov/budget/documents/fy-2025-26-city-portland-adopted-budget-vol-1-city-summaries-and-bureau-budgets/download",
+      "headline": {
+        "total_budget": 8640000000,
+        "program_expenses": 4490000000,
+        "general_fund_discretionary": 806400000,
+        "_source": "Adopted budget page: '$8.64 billion total budget', '$4.49 billion in program expenses', '$806.4 million in General Fund discretionary'."
+      },
+      "expenses_by_service_area": {
+        "_source": "Budget book Vol. 1, p. 47, Figure 9: Total City Bureau Expenses - Requirements by Service Area",
+        "total": 4500656864,
+        "items": {
+          "Public Works": 2137981006,
+          "City Operations": 791057381,
+          "Community & Economic Development": 638183239,
+          "Public Safety": 593325197,
+          "City Administrator": 302879494,
+          "City Council": 19548454,
+          "Office of the City Auditor": 14185501,
+          "Office of the Mayor": 3496592
+        }
+      },
+      "general_fund_by_service_area": {
+        "_source": "Budget book Vol. 1, p. 50, Figure 11: General Fund - Requirements by Service Area",
+        "total": 1118110604,
+        "items": {
+          "Public Safety": 534396264,
+          "City Administrator": 222514525,
+          "Public Works": 178059929,
+          "Community & Economic Development": 73693005,
+          "City Operations": 72216334,
+          "City Council": 19548454,
+          "Office of the City Auditor": 14185501,
+          "Office of the Mayor": 3496592
+        }
+      },
+      "general_fund_resources": {
+        "_source": "Budget book Vol. 1, p. 50, Figure 10: General Fund - Resource by Major Category",
+        "total": 1118110604,
+        "items": {
+          "Property Taxes": 353000000,
+          "Transfers from Other Funds": 286773174,
+          "Business Licenses": 220000000,
+          "Utility License Fees": 113100000,
+          "Intergovernmental": 45913554,
+          "Beginning Fund Balance": 42171124,
+          "Service Charges & Other": 29152752,
+          "Lodging Taxes": 28000000
+        }
+      },
+      "city_resources": {
+        "_source": "Budget book Vol. 1, p. 47, Figure 8: City Net Budget - Resources",
+        "total": 6463230398,
+        "items": {
+          "Beginning Fund Balance": 2388421827,
+          "Charges for Services": 1099929180,
+          "Taxes": 1017623987,
+          "Bond & Note Proceeds": 889427792,
+          "Intergovernmental": 503890433,
+          "Licenses & Permits": 436242708,
+          "Miscellaneous": 127694471
+        }
+      }
+    }
+  ],
+  "service_areas": {
+    "_source": "Adopted budget pages (FY 2025-26 and FY 2026-27): descriptions quoted or closely paraphrased from the City's own text.",
+    "Public Works": "Includes the Water Bureau, the Bureau of Environmental Services, the Portland Bureau of Transportation, and Portland Parks & Recreation. Includes capital projects, not just operations.",
+    "Public Safety": "Includes the Portland Police Bureau and Portland Fire & Rescue.",
+    "City Administrator": "Includes Fund and Debt Management: pass-through funds such as debt proceeds, General Fund contingency, and technical accounts."
+  }
+}

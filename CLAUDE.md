@@ -20,6 +20,7 @@ A public, searchable site of Portland City Council votes where visitors can:
 |---|---|
 | `index.html`, `assets/home.js` | Home page: explore by councilor (photos) or theme; links into the data page with filters in the URL hash. (A neighborhood map was removed at the user's request: most items aren't tied to a neighborhood.) |
 | `data.html`, `assets/data.js` | Full table of every vote ("View all data"), frozen header row, councilors ordered by district. |
+| `budget.html`, `assets/budget.js`, `data/budget.json` | Budget breakdown page: headline figures, spending and revenue by category for each adopted budget, and the council's budget votes. Every figure in `budget.json` cites its budget-book page; add a new year the same way (check each number appears on the cited page). |
 | `assets/common.js`, `assets/style.css` | Shared data loading, theme icons and styles. |
 | `assets/councilors.json`, `assets/councilors/` | Councilor names, districts, official City portraits (from portland.gov/council). Update if the council changes. |
 | `data/motions.csv` | Every other recorded roll call (amendments, Budget Committee approvals, procedural motions, consent agendas). Generated; never edit by hand. |
