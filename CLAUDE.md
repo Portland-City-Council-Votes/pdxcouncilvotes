@@ -52,6 +52,8 @@ https://www.portland.gov/council/agenda/all?committee=950&page=N
 
 **Skip:** board/commission appointments and reappointments, foreclosure-lien initiations, routine lawsuit/property-damage settlements, standard contract/procurement awards, Local Improvement District assessments, minutes approvals, and items only "passed to second reading" (log them on the date of the final vote instead, so nothing is counted twice).
 
+**Settlements:** include a lawsuit settlement only if it is $1 million or more, or the vote was split.
+
 **Include:** code amendments (Chapter/Title changes), resolutions, franchise/utility agreements, notable appropriations (large or contested), renamings/redesignations, budget items, and **any vote that isn't unanimous**, whatever its category.
 
 When unsure, include it. Filtering out noise later is cheaper than re-fetching pages for missed items.
@@ -93,10 +95,10 @@ Quote any field that contains a comma. Use Python's `csv` module to write rows r
 
 ## Progress
 
-Working newest to oldest. `data/meetings.csv` is the source of truth; as of the last update:
+`data/meetings.csv` is the source of truth. As of Sept 23, 2026:
 
-- **Done:** every meeting from Sept 17, 2025 through Sept 16, 2026.
+- **Done:** every meeting from Jan 2, 2025 through Sept 16, 2026 (64 meetings, 199 major items, 69 of them split votes).
 - **In progress:** Sept 23-24, 2026. Items 2026-277 and 2026-301 are logged; the rest (2026-278, 263 reconsideration, 186, 212, 300, 311, 312) had no final vote yet. Re-run it once the meeting is over; `add_votes.py` refuses duplicates.
-- **Next up:** Sept 3, 2025, then back through the list to Jan 2, 2025.
-- An earlier session (outside this repo) processed Sept 9-23 and lost its data; that work has been redone here.
-- Known edge case: 2026-222 (July 22, 2026) failed 6-6 with Mayor Wilson breaking the tie by voting Nay. Log it with a `note`.
+- **Ongoing:** add new meetings from the `agenda/all` listing as they happen.
+- Mayor tie-break so far: 2026-222 (July 22, 2026), logged with a note in its synopsis.
+- 2025-207 (June 4, 2025) was a vote to remand the Children's Levy recommendations; Yea means "send it back". The synopsis says so.
