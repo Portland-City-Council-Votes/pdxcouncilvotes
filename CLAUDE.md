@@ -1,0 +1,87 @@
+# Portland Council Votes — project notes
+
+Read this before touching the data. It replaces the earlier "Project Notes (for future Claude)" artifact; this file is the source of truth now because it lives in the repo and survives between sessions.
+
+## Goal
+
+A public, searchable site of Portland City Council votes where visitors can:
+
+1. Browse a spreadsheet-style view: date, item, a short plain-language synopsis, and how each of the 12 councilors voted.
+2. Filter by **theme** (Housing, Public Safety, Budget/Taxes, Transportation, Homelessness, Environment/Energy, Arts & Culture, Government Operations, Government Transparency, …).
+3. Filter by **neighborhood** affected (a named area when the agenda gives one, otherwise "Citywide").
+
+**Decided (Sept 2026):** a static site served by GitHub Pages from this repo. No build step, no backend. `index.html` + `assets/app.js` load `data/votes.csv` and filter in the browser.
+
+**Scope (Sept 2026):** every full-council meeting since the 12-member council took office in **January 2025** through the present, not just the last year.
+
+## Layout
+
+| Path | What it is |
+|---|---|
+| `index.html`, `assets/` | The site. Councilor columns come from the CSV header, so the page needs no change when data is added. |
+| `data/votes.csv` | The dataset, one row per major agenda item with a final vote. |
+| `data/meetings.csv` | Progress tracker, one row per meeting date: `pending`, `done` or `cancelled`. |
+| `scripts/validate_data.py` | Schema check for both CSVs. Run `python3 scripts/validate_data.py` before every commit that touches `data/`; CI runs it too. |
+
+Preview locally with `python3 -m http.server` and open http://localhost:8000 (opening `index.html` as a file won't load the CSV).
+
+## Where the data comes from
+
+Do **not** use `portland.gov/council/votes?page=N`: it returns duplicate, stale or wrong pages when fetched programmatically.
+
+Use the individual meeting agenda pages instead:
+
+```
+https://www.portland.gov/council/agenda/YYYY/M/D
+```
+
+These load reliably and list every item with its type, sponsor, department, neighborhood tag, amendments and procedural motions, and the final vote as named Aye/Nay/Absent/Abstain lists.
+
+The list of all full-council meeting dates (paginated, reliable):
+
+```
+https://www.portland.gov/council/agenda/all?committee=950&page=N
+```
+
+`committee=950` limits it to full City Council (no committees).
+
+**Network:** the cloud environment must allow `www.portland.gov`. If fetches fail with an egress/proxy block, the user has to add that domain under Network access in the environment settings.
+
+## What counts as "major"
+
+**Skip:** board/commission appointments and reappointments, foreclosure-lien initiations, routine lawsuit/property-damage settlements, standard contract/procurement awards, Local Improvement District assessments, minutes approvals, and items only "passed to second reading" (log them on the date of the final vote instead, so nothing is counted twice).
+
+**Include:** code amendments (Chapter/Title changes), resolutions, franchise/utility agreements, notable appropriations (large or contested), renamings/redesignations, budget items, and **any vote that isn't unanimous**, whatever its category.
+
+When unsure, include it. Filtering out noise later is cheaper than re-fetching pages for missed items.
+
+## `data/votes.csv` schema
+
+```
+date,doc_number,title,synopsis,type,action,theme,neighborhood,url,
+Morillo,Avalos,Ryan,Pirtle-Guiney,Zimmerman,Dunphy,Smith,Green,Clark,Kanal,Novick,Koyama Lane
+```
+
+- **date**: `YYYY-MM-DD`, the date of the final vote.
+- **doc_number**: the agenda's document number.
+- **title**: the official title as shown on the agenda.
+- **synopsis**: one or two plain-language sentences on what the item does. Written by Claude; keep it neutral and factual.
+- **type**: `Ordinance`, `Emergency ordinance`, `Resolution` or `Report`.
+- **action**: the "Council action" field copied word for word (Passed, Passed as amended, Failed to pass, Adopted, Adopted as amended, Postponed, Referred, …).
+- **theme**: assigned by Claude, not an official City category. Several themes go in one field separated by `; `. Reuse existing theme names; add a new one only when nothing fits.
+- **neighborhood**: from the agenda page's own "Neighborhood" tag(s), several separated by `; `. If it lists all six areas (North/South/Northeast/Northwest/Southeast/Southwest), use `Citywide`. If the page has no neighborhood tag, use `Not specified in agenda`. Never guess a neighborhood from the item's subject.
+- **url**: the agenda page (or the item's own page) on portland.gov.
+- **councilor columns**: `Yea`, `Nay`, `Absent` or `Abstain` (the agenda's "Aye" is recorded as "Yea"). Leave blank only if the page truly doesn't say.
+
+Quote any field that contains a comma. Use Python's `csv` module to write rows rather than building lines by hand.
+
+## How to work through the meetings
+
+- Fill `data/meetings.csv` with every meeting date from the `agenda/all` listing (January 2025 onward) as `pending`. Nov 5, 2025 was cancelled.
+- Fetch one agenda page at a time and read it carefully; the reading is the slow part, not the fetch.
+- After each meeting: append its rows to `data/votes.csv`, mark it `done` with `items_logged`, run the validator, then commit and push. Small commits mean nothing is lost if a session ends.
+- The user expects this to take several sessions. Don't apologize for the pace; report progress plainly.
+
+## Progress
+
+An earlier session (outside this repo) processed Sept 9, 16 and 23, 2026 and logged 9 items, but that data was lost with its container. Those three meetings are back to `pending`. No meetings are finished in this repo yet; see `data/meetings.csv` for the current state.
