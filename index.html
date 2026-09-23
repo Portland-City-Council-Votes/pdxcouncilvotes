@@ -4,68 +4,69 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Portland Council Votes</title>
-  <meta name="description" content="Search how each member of Portland's 12-member City Council voted, by theme and neighborhood.">
+  <meta name="description" content="See how Portland's 12 city councilors voted since January 2025. Explore by councilor, neighborhood or theme.">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-  <header class="site-header">
+  <nav class="site-nav">
     <div class="wrap">
-      <h1>Portland Council Votes</h1>
-      <p class="lede">How each of Portland's 12 councilors voted on major items since the expanded council took office in January 2025.</p>
-      <p class="summary" id="summary" aria-live="polite">Loading votes…</p>
+      <a class="brand" href="./">Portland Council Votes</a>
+      <a href="./" aria-current="page">Explore</a>
+      <a href="data.html">All votes</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <h1>How did Portland’s City Council vote?</h1>
+      <p class="lede">Every major vote of the 12-member council since it took office in January 2025. Pick a councilor, a neighborhood or a theme to see the votes behind it.</p>
+      <p class="stats" id="stats" aria-live="polite">Loading votes…</p>
+      <a class="button" href="data.html">View all data</a>
     </div>
   </header>
 
   <main class="wrap">
-    <form class="filters" id="filters" role="search" aria-label="Filter votes">
-      <label class="field field-search">
-        <span>Search</span>
-        <input type="search" id="q" name="q" placeholder="Title, synopsis or document number" autocomplete="off">
-      </label>
-      <label class="field">
-        <span>Theme</span>
-        <select id="theme" name="theme"><option value="">All themes</option></select>
-      </label>
-      <label class="field">
-        <span>Neighborhood</span>
-        <select id="neighborhood" name="neighborhood"><option value="">All neighborhoods</option></select>
-      </label>
-      <label class="field">
-        <span>Councilor</span>
-        <select id="councilor" name="councilor"><option value="">Any councilor</option></select>
-      </label>
-      <label class="field">
-        <span>Voted</span>
-        <select id="vote" name="vote">
-          <option value="">Any way</option>
-          <option>Yea</option>
-          <option>Nay</option>
-          <option>Absent</option>
-          <option>Abstain</option>
-        </select>
-      </label>
-      <label class="field">
-        <span>Sort</span>
-        <select id="sort" name="sort">
-          <option value="newest">Newest first</option>
-          <option value="oldest">Oldest first</option>
-        </select>
-      </label>
-      <label class="check">
-        <input type="checkbox" id="contested" name="contested">
-        <span>Only split votes</span>
-      </label>
-      <button type="reset" class="reset">Clear filters</button>
-    </form>
+    <section class="explore" aria-labelledby="h-councilors">
+      <h2 id="h-councilors">By councilor</h2>
+      <p class="section-lede">Choose a councilor to see every vote they cast.</p>
+      <div id="councilors" class="districts"></div>
+    </section>
 
-    <div class="results" id="results"></div>
+    <section class="explore" aria-labelledby="h-map">
+      <h2 id="h-map">By neighborhood</h2>
+      <p class="section-lede">Choose a shaded neighborhood to see items the agenda tagged to it. Most items affect the whole city, and some aren’t tagged to any area.</p>
+      <div class="map-layout">
+        <div class="map-wrap">
+          <svg id="map" role="img" aria-label="Map of Portland neighborhoods; shaded neighborhoods have votes"></svg>
+          <div class="map-tip" id="map-tip" hidden></div>
+        </div>
+        <div class="map-side">
+          <div class="map-wide" id="map-wide"></div>
+          <h3>Tagged neighborhoods</h3>
+          <ul class="hood-list" id="hood-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="explore" aria-labelledby="h-themes">
+      <h2 id="h-themes">By theme</h2>
+      <p class="section-lede">Themes are this site’s own labels; an item can have more than one.</p>
+      <div id="themes" class="theme-grid"></div>
+    </section>
+
+    <section class="explore" aria-labelledby="h-news" id="news-section" hidden>
+      <h2 id="h-news">In the news</h2>
+      <p class="section-lede">Recent coverage of items the council voted on.</p>
+      <ul id="news" class="news-list"></ul>
+    </section>
   </main>
 
   <footer class="site-footer wrap">
-    <p>Source: meeting agendas at <a href="https://www.portland.gov/council/agenda/all?committee=950">portland.gov/council</a>. Synopses, themes and the choice of which items count as “major” are this site’s own editorial calls, not official City categories. Routine business such as appointments, settlements and contract awards is left out.</p>
-    <p><a href="data/votes.csv" download>Download the full dataset (CSV)</a></p>
+    <p>Source: meeting agendas at <a href="https://www.portland.gov/council/agenda/all?committee=950">portland.gov/council</a>. Councilor photos are official City of Portland portraits. Neighborhood boundaries: City of Portland. Synopses, themes and the choice of which items count as “major” are this site’s own editorial calls.</p>
+    <p><a href="data.html">View all data</a> · <a href="data/votes.csv" download>Download the dataset (CSV)</a></p>
   </footer>
 
-  <script src="assets/app.js"></script>
+  <script src="assets/common.js"></script>
+  <script src="assets/home.js"></script>
 </body>
 </html>

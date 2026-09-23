@@ -1,66 +1,22 @@
-// Portland Council Votes: loads data/votes.csv and filters it in the browser.
-// Councilor columns are every column after `url`, so the page follows the CSV header.
+// Full data page: every vote in a filterable table.
+// Filters live in the URL hash so the home page (and anyone) can link to a filtered view.
 
 (function () {
   "use strict";
 
-  const DATA_URL = "data/votes.csv";
-  const FIRST_VOTE_COLUMN = "url";
+  const { loadAll, el, fmtDate } = window.PCV;
   const VOTE_ABBR = { Yea: "Y", Nay: "N", Absent: "A", Abstain: "Ab" };
   const FILTER_IDS = ["q", "theme", "neighborhood", "councilor", "vote", "sort", "contested"];
 
   const els = Object.fromEntries(
-    FILTER_IDS.concat(["filters", "results", "summary"]).map((id) => [id, document.getElementById(id)])
+    FILTER_IDS.concat(["filters", "results", "summary", "banner"]).map((id) => [id, document.getElementById(id)])
   );
 
   let rows = [];
   let councilors = [];
 
-  // RFC 4180 CSV parser: quoted fields, escaped quotes, newlines inside quotes.
-  function parseCSV(text) {
-    const out = [];
-    let row = [];
-    let field = "";
-    let quoted = false;
-    for (let i = 0; i < text.length; i++) {
-      const c = text[i];
-      if (quoted) {
-        if (c === '"' && text[i + 1] === '"') { field += '"'; i++; }
-        else if (c === '"') quoted = false;
-        else field += c;
-      } else if (c === '"') quoted = true;
-      else if (c === ",") { row.push(field); field = ""; }
-      else if (c === "\n" || c === "\r") {
-        if (c === "\r" && text[i + 1] === "\n") i++;
-        row.push(field); out.push(row); row = []; field = "";
-      } else field += c;
-    }
-    if (field !== "" || row.length) { row.push(field); out.push(row); }
-    return out.filter((r) => r.some((v) => v.trim() !== ""));
-  }
-
-  // Themes and neighborhoods may hold several values separated by semicolons.
-  const splitList = (value) => value.split(";").map((s) => s.trim()).filter(Boolean);
-
-  function toRecords(table) {
-    const [header, ...body] = table;
-    const start = header.indexOf(FIRST_VOTE_COLUMN) + 1;
-    councilors = header.slice(start);
-    return body.map((cells) => {
-      const r = Object.fromEntries(header.map((h, i) => [h, (cells[i] || "").trim()]));
-      r.themes = splitList(r.theme);
-      r.neighborhoods = splitList(r.neighborhood);
-      r.votes = councilors.map((name) => ({ name, vote: r[name] }));
-      r.tally = { Yea: 0, Nay: 0, Absent: 0, Abstain: 0 };
-      r.votes.forEach((v) => { if (v.vote in r.tally) r.tally[v.vote]++; });
-      r.split = r.tally.Yea > 0 && r.tally.Nay > 0;
-      r.haystack = [r.title, r.synopsis, r.doc_number, r.action].join(" ").toLowerCase();
-      return r;
-    });
-  }
-
-  function fillSelect(select, values) {
-    values.forEach((v) => select.add(new Option(v, v)));
+  function fillSelect(select, options) {
+    options.forEach(([value, label]) => select.add(new Option(label, value)));
   }
 
   function uniqueSorted(lists) {
@@ -91,7 +47,6 @@
     return true;
   }
 
-  // Keep filters in the URL hash so a filtered view can be shared as a link.
   function writeHash(f) {
     const params = new URLSearchParams();
     Object.entries(f).forEach(([k, v]) => {
@@ -107,27 +62,16 @@
   function readHash() {
     const params = new URLSearchParams(location.hash.slice(1));
     FILTER_IDS.forEach((id) => {
-      if (!params.has(id)) return;
-      const el = els[id];
-      if (el.type === "checkbox") el.checked = params.get(id) === "1";
-      else if (el.tagName === "SELECT" && ![...el.options].some((o) => o.value === params.get(id))) return;
-      else el.value = params.get(id);
+      const node = els[id];
+      if (!params.has(id)) {
+        if (node.type === "checkbox") node.checked = false;
+        else node.value = id === "sort" ? "newest" : "";
+        return;
+      }
+      if (node.type === "checkbox") node.checked = params.get(id) === "1";
+      else if (node.tagName === "SELECT" && ![...node.options].some((o) => o.value === params.get(id))) return;
+      else node.value = params.get(id);
     });
-  }
-
-  const fmtDate = (iso) => {
-    const d = new Date(iso + "T12:00:00");
-    return isNaN(d) ? iso : d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
-  };
-
-  function el(tag, attrs, ...children) {
-    const node = document.createElement(tag);
-    Object.entries(attrs || {}).forEach(([k, v]) => {
-      if (k === "class") node.className = v;
-      else node.setAttribute(k, v);
-    });
-    children.flat().forEach((c) => { if (c != null && c !== "") node.append(c); });
-    return node;
   }
 
   function tallyText(t) {
@@ -137,11 +81,41 @@
     return parts.join(", ");
   }
 
+  function renderBanner(f) {
+    const c = councilors.find((x) => x.name === f.councilor);
+    els.banner.hidden = !c;
+    els.banner.replaceChildren();
+    if (!c) return;
+    const counts = { Yea: 0, Nay: 0, Absent: 0, Abstain: 0 };
+    let dissent = 0;
+    rows.forEach((r) => {
+      const v = r[c.name];
+      if (v in counts) counts[v]++;
+      // Voted against the outcome: Nay on something that passed, or Yea on something that failed.
+      const passed = r.tally.Yea > r.tally.Nay;
+      if ((v === "Nay" && passed) || (v === "Yea" && !passed && r.tally.Nay > 0)) dissent++;
+    });
+    els.banner.append(
+      c.photo ? el("img", { src: c.photo, alt: "", width: "72", height: "72" }) : null,
+      el("div", {},
+        el("h2", {}, c.full_name),
+        el("p", { class: "meta" }, c.district ? `District ${c.district} councilor` : "",
+          c.profile ? [" · ", el("a", { href: c.profile, target: "_blank", rel: "noopener" }, "City profile")] : null),
+        el("p", {}, `${counts.Yea} Yea · ${counts.Nay} Nay · ${counts.Absent} absent · ${counts.Abstain} abstain across ${rows.length} votes. ` +
+          `On the losing side ${dissent} time${dissent === 1 ? "" : "s"}.`)
+      )
+    );
+  }
+
   function renderRow(r, focus) {
     const item = el("td", { class: "c-item" },
       el("a", { href: r.url, class: "item-title", target: "_blank", rel: "noopener" }, r.title),
       r.synopsis ? el("p", { class: "synopsis" }, r.synopsis) : null,
-      el("p", { class: "meta" }, [r.doc_number, r.type, r.action].filter(Boolean).join(" · "))
+      el("p", { class: "meta" }, [r.doc_number, r.type, r.action].filter(Boolean).join(" · ")),
+      r.news.length ? el("ul", { class: "news" },
+        r.news.map((n) => el("li", {},
+          el("a", { href: n.url, target: "_blank", rel: "noopener" }, n.headline),
+          el("span", { class: "outlet" }, " — " + n.outlet)))) : null
     );
     const tags = (list, cls) => list.map((t) => el("span", { class: "tag " + cls }, t));
     const cells = [
@@ -150,9 +124,12 @@
       el("td", { class: "c-tags" }, tags(r.themes, "tag-theme"), tags(r.neighborhoods, "tag-place")),
       el("td", { class: "c-tally" + (r.split ? " is-split" : "") }, tallyText(r.tally)),
     ];
-    r.votes.forEach((v) => {
-      const cls = "v v-" + (v.vote || "none").toLowerCase() + (focus === v.name ? " is-focus" : "");
-      cells.push(el("td", { class: cls, "data-name": v.name, title: `${v.name}: ${v.vote || "no vote recorded"}` },
+    r.votes.forEach((v, i) => {
+      const c = councilors[i];
+      const label = c.district ? `${v.name} (D${c.district})` : v.name;
+      const first = i === 0 || councilors[i - 1].district !== c.district;
+      const cls = "v v-" + (v.vote || "none").toLowerCase() + (focus === v.name ? " is-focus" : "") + (first ? " d-start" : "");
+      cells.push(el("td", { class: cls, "data-name": label, title: `${label}: ${v.vote || "no vote recorded"}` },
         el("span", { "aria-hidden": "true" }, VOTE_ABBR[v.vote] || "–"),
         el("span", { class: "sr-only" }, v.vote || "no vote recorded")
       ));
@@ -163,6 +140,7 @@
   function render() {
     const f = readFilters();
     writeHash(f);
+    renderBanner(f);
     const list = rows.filter((r) => matches(r, f));
     list.sort((a, b) => (f.sort === "oldest" ? 1 : -1) * a.date.localeCompare(b.date));
 
@@ -178,13 +156,18 @@
       return;
     }
 
+    // Councilors are ordered by district; mark where each district starts.
     const head = el("tr", {},
       el("th", { scope: "col", class: "c-date" }, "Date"),
       el("th", { scope: "col", class: "c-item" }, "Item"),
       el("th", { scope: "col", class: "c-tags" }, "Theme / Area"),
       el("th", { scope: "col", class: "c-tally" }, "Yea–Nay"),
-      councilors.map((name) => el("th", { scope: "col", class: "v-head" + (f.councilor === name ? " is-focus" : "") },
-        el("span", {}, name)))
+      councilors.map((c, i) => {
+        const first = i === 0 || councilors[i - 1].district !== c.district;
+        return el("th", { scope: "col", class: "v-head" + (f.councilor === c.name ? " is-focus" : "") + (first ? " d-start" : "") },
+          el("span", { class: "v-name" }, c.name),
+          c.district ? el("span", { class: "v-district" }, "D" + c.district) : null);
+      })
     );
     const table = el("table", { class: "votes" },
       el("caption", { class: "sr-only" }, "Council votes, one row per item, one column per councilor"),
@@ -196,16 +179,14 @@
 
   async function load() {
     try {
-      const res = await fetch(DATA_URL, { cache: "no-cache" });
-      if (!res.ok) throw new Error(res.status + " " + res.statusText);
-      rows = toRecords(parseCSV(await res.text()));
+      ({ votes: rows, councilors } = await loadAll());
     } catch (err) {
       els.summary.textContent = "Couldn't load the vote data (" + err.message + ").";
       return;
     }
-    fillSelect(els.theme, uniqueSorted(rows.map((r) => r.themes)));
-    fillSelect(els.neighborhood, uniqueSorted(rows.map((r) => r.neighborhoods)));
-    fillSelect(els.councilor, councilors);
+    fillSelect(els.theme, uniqueSorted(rows.map((r) => r.themes)).map((t) => [t, t]));
+    fillSelect(els.neighborhood, uniqueSorted(rows.map((r) => r.neighborhoods)).map((n) => [n, n]));
+    fillSelect(els.councilor, councilors.map((c) => [c.name, c.district ? `${c.full_name} (District ${c.district})` : c.full_name]));
     readHash();
     render();
   }
@@ -213,5 +194,6 @@
   els.filters.addEventListener("input", render);
   els.filters.addEventListener("submit", (e) => e.preventDefault());
   els.filters.addEventListener("reset", () => setTimeout(render));
+  window.addEventListener("hashchange", () => { readHash(); render(); });
   load();
 })();

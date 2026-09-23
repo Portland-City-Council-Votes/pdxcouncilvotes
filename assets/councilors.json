@@ -1,0 +1,98 @@
+[
+ {
+  "name": "Avalos",
+  "full_name": "Candace Avalos",
+  "district": 1,
+  "slug": "candace-avalos",
+  "profile": "https://www.portland.gov/council/districts/1/candace-avalos",
+  "photo": "assets/councilors/candace-avalos.jpg"
+ },
+ {
+  "name": "Dunphy",
+  "full_name": "Jamie Dunphy",
+  "district": 1,
+  "slug": "jamie-dunphy",
+  "profile": "https://www.portland.gov/council/districts/1/jamie-dunphy",
+  "photo": "assets/councilors/jamie-dunphy.jpg"
+ },
+ {
+  "name": "Smith",
+  "full_name": "Loretta Smith",
+  "district": 1,
+  "slug": "loretta-smith",
+  "profile": "https://www.portland.gov/council/districts/1/loretta-smith",
+  "photo": "assets/councilors/loretta-smith.jpg"
+ },
+ {
+  "name": "Kanal",
+  "full_name": "Sameer Kanal",
+  "district": 2,
+  "slug": "sameer-kanal",
+  "profile": "https://www.portland.gov/council/districts/2/sameer-kanal",
+  "photo": "assets/councilors/sameer-kanal.jpg"
+ },
+ {
+  "name": "Pirtle-Guiney",
+  "full_name": "Elana Pirtle-Guiney",
+  "district": 2,
+  "slug": "elana-pirtle-guiney",
+  "profile": "https://www.portland.gov/council/districts/2/elana-pirtle-guiney",
+  "photo": "assets/councilors/elana-pirtle-guiney.jpg"
+ },
+ {
+  "name": "Ryan",
+  "full_name": "Dan Ryan",
+  "district": 2,
+  "slug": "dan-ryan",
+  "profile": "https://www.portland.gov/council/districts/2/dan-ryan",
+  "photo": "assets/councilors/dan-ryan.jpg"
+ },
+ {
+  "name": "Koyama Lane",
+  "full_name": "Tiffany Koyama Lane",
+  "district": 3,
+  "slug": "tiffany-koyama-lane",
+  "profile": "https://www.portland.gov/council/districts/3/tiffany-koyama-lane",
+  "photo": "assets/councilors/tiffany-koyama-lane.jpg"
+ },
+ {
+  "name": "Morillo",
+  "full_name": "Angelita Morillo",
+  "district": 3,
+  "slug": "angelita-morillo",
+  "profile": "https://www.portland.gov/council/districts/3/angelita-morillo",
+  "photo": "assets/councilors/angelita-morillo.jpg"
+ },
+ {
+  "name": "Novick",
+  "full_name": "Steve Novick",
+  "district": 3,
+  "slug": "steve-novick",
+  "profile": "https://www.portland.gov/council/districts/3/steve-novick",
+  "photo": "assets/councilors/steve-novick.jpg"
+ },
+ {
+  "name": "Clark",
+  "full_name": "Olivia Clark",
+  "district": 4,
+  "slug": "olivia-clark",
+  "profile": "https://www.portland.gov/council/districts/4/olivia-clark",
+  "photo": "assets/councilors/olivia-clark.jpg"
+ },
+ {
+  "name": "Green",
+  "full_name": "Mitch Green",
+  "district": 4,
+  "slug": "mitch-green",
+  "profile": "https://www.portland.gov/council/districts/4/mitch-green",
+  "photo": "assets/councilors/mitch-green.jpg"
+ },
+ {
+  "name": "Zimmerman",
+  "full_name": "Eric Zimmerman",
+  "district": 4,
+  "slug": "eric-zimmerman",
+  "profile": "https://www.portland.gov/council/districts/4/eric-zimmerman",
+  "photo": "assets/councilors/eric-zimmerman.jpg"
+ }
+]

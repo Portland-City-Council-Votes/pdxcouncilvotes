@@ -18,7 +18,12 @@ A public, searchable site of Portland City Council votes where visitors can:
 
 | Path | What it is |
 |---|---|
-| `index.html`, `assets/` | The site. Councilor columns come from the CSV header, so the page needs no change when data is added. |
+| `index.html`, `assets/home.js` | Home page: explore by councilor (photos), neighborhood map, or theme; links into the data page with filters in the URL hash. |
+| `data.html`, `assets/data.js` | Full table of every vote ("View all data"), frozen header row, councilors ordered by district. |
+| `assets/common.js`, `assets/style.css` | Shared data loading, theme icons and styles. |
+| `assets/councilors.json`, `assets/councilors/` | Councilor names, districts, official City portraits (from portland.gov/council). Update if the council changes. |
+| `assets/neighborhoods.json` | Simplified City of Portland neighborhood boundaries for the map. Agenda names are matched case-insensitively; add exceptions to `HOOD_ALIASES` in `common.js`. |
+| `data/news.csv` | News coverage linked to voted items: `doc_number,outlet,headline,url`. |
 | `data/votes.csv` | The dataset, one row per major agenda item with a final vote. |
 | `data/meetings.csv` | Progress tracker, one row per meeting: date, agenda URL, `pending`/`done`/`cancelled`, items logged, notes. |
 | `scripts/parse_agenda.py`, `scripts/add_votes.py` | Read an agenda page into structured items; append chosen items to the CSVs. See "How to work through the meetings". |
@@ -57,6 +62,12 @@ https://www.portland.gov/council/agenda/all?committee=950&page=N
 **Include:** code amendments (Chapter/Title changes), resolutions, franchise/utility agreements, notable appropriations (large or contested), renamings/redesignations, budget items, and **any vote that isn't unanimous**, whatever its category.
 
 When unsure, include it. Filtering out noise later is cheaper than re-fetching pages for missed items.
+
+## `data/news.csv` rules
+
+- Only link articles actually found (search results or the page itself) that are clearly about that item and vote. Never guess a URL or headline.
+- Use the article's own headline and the outlet's name.
+- **OregonLive URLs must end with `?outputType=amp`** (the validator enforces this).
 
 ## `data/votes.csv` schema
 

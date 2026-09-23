@@ -94,10 +94,36 @@ def check_meetings(errors):
                 errors.append(f"{where}: a done meeting needs items_logged (a number, 0 is fine)")
 
 
+def check_news(errors):
+    path = ROOT / "data" / "news.csv"
+    with (ROOT / "data" / "votes.csv").open(newline="", encoding="utf-8") as f:
+        docs = {r["doc_number"] for r in csv.DictReader(f)}
+    with path.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        if reader.fieldnames != ["doc_number", "outlet", "headline", "url"]:
+            errors.append(f"{path.name}: header must be exactly: doc_number,outlet,headline,url")
+            return
+        seen = set()
+        for line, row in enumerate(reader, start=2):
+            where = f"{path.name}:{line}"
+            if row["doc_number"] not in docs:
+                errors.append(f"{where}: {row['doc_number']} is not in votes.csv")
+            if not row["headline"].strip() or not row["outlet"].strip():
+                errors.append(f"{where}: headline and outlet are required")
+            if not row["url"].startswith("https://"):
+                errors.append(f"{where}: url must start with https://")
+            if "oregonlive.com" in row["url"] and not row["url"].endswith("?outputType=amp"):
+                errors.append(f"{where}: OregonLive links must end with ?outputType=amp")
+            if (row["doc_number"], row["url"]) in seen:
+                errors.append(f"{where}: duplicate link for {row['doc_number']}")
+            seen.add((row["doc_number"], row["url"]))
+
+
 def main():
     errors = []
     check_votes(errors)
     check_meetings(errors)
+    check_news(errors)
     if errors:
         print("\n".join(errors))
         print(f"\n{len(errors)} problem(s) found.")

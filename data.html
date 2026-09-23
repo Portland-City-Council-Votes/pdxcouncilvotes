@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>All Votes · Portland Council Votes</title>
+  <meta name="description" content="Every major Portland City Council vote since January 2025, with how each of the 12 councilors voted.">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <nav class="site-nav">
+    <div class="wrap">
+      <a class="brand" href="./">Portland Council Votes</a>
+      <a href="./">Explore</a>
+      <a href="data.html" aria-current="page">All votes</a>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="wrap">
+      <h1>All votes</h1>
+      <p class="summary" id="summary" aria-live="polite">Loading votes…</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="councilor-banner" id="banner" hidden></section>
+
+    <form class="filters" id="filters" role="search" aria-label="Filter votes">
+      <label class="field field-search">
+        <span>Search</span>
+        <input type="search" id="q" name="q" placeholder="Title, synopsis, headline or document number" autocomplete="off">
+      </label>
+      <label class="field">
+        <span>Theme</span>
+        <select id="theme" name="theme"><option value="">All themes</option></select>
+      </label>
+      <label class="field">
+        <span>Neighborhood</span>
+        <select id="neighborhood" name="neighborhood"><option value="">All neighborhoods</option></select>
+      </label>
+      <label class="field">
+        <span>Councilor</span>
+        <select id="councilor" name="councilor"><option value="">Any councilor</option></select>
+      </label>
+      <label class="field">
+        <span>Voted</span>
+        <select id="vote" name="vote">
+          <option value="">Any way</option>
+          <option>Yea</option>
+          <option>Nay</option>
+          <option>Absent</option>
+          <option>Abstain</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Sort</span>
+        <select id="sort" name="sort">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+        </select>
+      </label>
+      <label class="check">
+        <input type="checkbox" id="contested" name="contested">
+        <span>Only split votes</span>
+      </label>
+      <button type="reset" class="reset">Clear filters</button>
+    </form>
+
+    <div class="results" id="results"></div>
+  </main>
+
+  <footer class="site-footer wrap">
+    <p>Source: meeting agendas at <a href="https://www.portland.gov/council/agenda/all?committee=950">portland.gov/council</a>. Synopses, themes and the choice of which items count as “major” are this site’s own editorial calls, not official City categories. Routine business such as appointments, settlements under $1 million and contract awards is left out unless the vote was split. News links go to independent coverage of each item.</p>
+    <p><a href="data/votes.csv" download>Download the full dataset (CSV)</a></p>
+  </footer>
+
+  <script src="assets/common.js"></script>
+  <script src="assets/data.js"></script>
+</body>
+</html>
