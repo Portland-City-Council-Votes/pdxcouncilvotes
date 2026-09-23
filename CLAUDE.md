@@ -95,8 +95,8 @@ Quote any field that contains a comma. Use Python's `csv` module to write rows r
 
 Working newest to oldest. `data/meetings.csv` is the source of truth; as of the last update:
 
-- **Done:** every meeting from Jan 7 through Sept 16, 2026.
+- **Done:** every meeting from Sept 17, 2025 through Sept 16, 2026.
 - **In progress:** Sept 23-24, 2026. Items 2026-277 and 2026-301 are logged; the rest (2026-278, 263 reconsideration, 186, 212, 300, 311, 312) had no final vote yet. Re-run it once the meeting is over; `add_votes.py` refuses duplicates.
-- **Next up:** Dec 17, 2025, then back through the list to Jan 2, 2025.
+- **Next up:** Sept 3, 2025, then back through the list to Jan 2, 2025.
 - An earlier session (outside this repo) processed Sept 9-23 and lost its data; that work has been redone here.
 - Known edge case: 2026-222 (July 22, 2026) failed 6-6 with Mayor Wilson breaking the tie by voting Nay. Log it with a `note`.
