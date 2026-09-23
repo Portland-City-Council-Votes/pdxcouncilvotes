@@ -5,14 +5,6 @@
 
   const { loadAll, fetchJSON, themeIcon, el, fmtDate, dataLink } = window.PCV;
 
-  function renderStats(votes, motions) {
-    const split = votes.filter((r) => r.split).length;
-    const dates = votes.map((r) => r.date).sort();
-    document.getElementById("stats").textContent = votes.length
-      ? `${votes.length} final votes · ${split} split · ${motions.length} amendment and motion votes · ${fmtDate(dates[0], { month: "short", year: "numeric" })} to ${fmtDate(dates[dates.length - 1], { month: "short", year: "numeric" })}`
-      : "No votes have been added yet.";
-  }
-
   // Districts 3 and 4 were elected to two-year terms in 2024, so their seats are on the
   // November 3, 2026 ballot (portland.gov/transition/advisory/questions/city-council-elections).
   function renderCouncilors(votes, councilors) {
@@ -141,10 +133,9 @@
     try {
       data = await loadAll();
     } catch (err) {
-      document.getElementById("stats").textContent = "Couldn't load the vote data (" + err.message + ").";
+      document.getElementById("councilors").replaceChildren(el("p", { class: "empty" }, "Couldn't load the vote data (" + err.message + ")."));
       return;
     }
-    renderStats(data.votes, data.motions);
     renderCouncilors(data.votes, data.councilors);
     setupDistrictFinder();
     renderThemes(data.votes, data.motions);
