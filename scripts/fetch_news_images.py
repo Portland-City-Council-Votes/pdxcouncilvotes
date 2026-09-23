@@ -4,7 +4,8 @@
     python3 scripts/fetch_news_images.py [--all]
 
 Reads each article page and takes its og:image (the picture news sites publish for
-link previews), then writes the URL into the image column. Rows that already have
+link previews), then writes the URL into the image column. The page's own title
+must match the stored headline, so an image never lands on the wrong story. Rows that already have
 an image are skipped unless --all is given. Articles that can't be fetched keep a
 blank image, and the site shows an outlet tile instead.
 
@@ -28,9 +29,26 @@ OG_IMAGE = re.compile(
 )
 
 
-def og_image(url):
+OG_TITLE = re.compile(r'<meta[^>]+property=["\']og:title["\'][^>]*content=["\']([^"\']+)', re.I)
+WORD = re.compile(r"[a-z0-9]+")
+
+
+def same_story(page, headline):
+    """True when the page's own title shares most of its words with our headline."""
+    m = OG_TITLE.search(page) or re.search(r"<title>(.*?)</title>", page, re.S | re.I)
+    if not m:
+        return False
+    title = set(WORD.findall(html.unescape(m.group(1)).lower()))
+    words = set(WORD.findall(headline.lower()))
+    return len(title & words) >= 0.6 * len(words)
+
+
+def og_image(url, headline):
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (portland-council-votes)"})
     page = urllib.request.urlopen(req, timeout=30).read(600_000).decode("utf-8", "replace")
+    if not same_story(page, headline):
+        print(f"skipped {url}: page title doesn't match the headline", file=sys.stderr)
+        return ""
     m = OG_IMAGE.search(page)
     if not m:
         return ""
@@ -53,7 +71,7 @@ def main():
             continue
         if row["url"] not in cache:
             try:
-                cache[row["url"]] = og_image(row["url"])
+                cache[row["url"]] = og_image(row["url"], row["headline"])
             except OSError as err:
                 print(f"couldn't fetch {row['url']}: {err}", file=sys.stderr)
                 cache[row["url"]] = ""
