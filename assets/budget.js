@@ -119,7 +119,7 @@
         el("p", { class: "period" }, `${year.fy} · ${year.period} · adopted ${fmtDate(year.adopted)}`),
         el("div", { class: "stats-row" },
           statTile("Total budget", h.total_budget, "Counts money moving between City funds more than once, as state law requires."),
-          statTile("Program expenses", h.program_expenses, "What bureaus actually spend on operations and capital projects."),
+          statTile("Program expenses", h.program_expenses, "What bureaus are budgeted to spend on operations and capital projects."),
           statTile("General Fund discretionary", h.general_fund_discretionary, "The most flexible money, mostly property and business taxes."))),
       barChart("h-spend", "Where the money goes", "Program expenses by service area. Service areas group City bureaus; the City notes the groupings changed, so they aren’t comparable year to year.",
         year.expenses_by_service_area, budget.service_areas),
