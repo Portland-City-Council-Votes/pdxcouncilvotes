@@ -1,5 +1,5 @@
 {
-  "_about": "Themes for agenda items whose motions are recorded but which are not in votes.csv (no final vote, or skipped as routine). Keyed by document number, or by agenda title for untyped entries.",
+  "_about": "Themes for agenda items whose motions are recorded but which are not in votes.csv (no final vote, or skipped as routine). Keyed by document number, or by agenda title for untyped entries. Entries for items that are in votes.csv override their themes for motions only (e.g. when the final ordinance covered several subjects but each amendment vote was about one).",
   "Council President and Vice President Election": "Government Operations",
   "Agenda approval": "Government Operations",
   "2025-026": "Land Use & Planning",
@@ -25,5 +25,7 @@
   "2026-157": "FY Budget; Budget & Taxes",
   "2026-163": "FY Budget; Economic Development",
   "2026-261": "Government Operations",
-  "Meeting business": "Government Operations"
+  "Meeting business": "Government Operations",
+  "2026-120": "FY Budget; Budget & Taxes",
+  "2026-223": "FY Budget; Budget & Taxes"
 }

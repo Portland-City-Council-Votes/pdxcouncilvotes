@@ -100,7 +100,9 @@ def main():
         for it in items:
             key = it["doc_number"] or it["title"]
             parent = parents.get(it["doc_number"]) if it["doc_number"] else None
-            theme = parent["theme"] if parent else extra_themes.get(key)
+            # motion_parents.json can also set a narrower base theme for an item that is in
+            # votes.csv, when the item's own themes don't apply to every vote under it.
+            theme = extra_themes.get(key) or (parent["theme"] if parent else None)
             if it["roll_calls"] and not theme:
                 missing.add(f"{key} ({m['date']}): {it['title'][:80]}")
             for rc in it["roll_calls"]:
