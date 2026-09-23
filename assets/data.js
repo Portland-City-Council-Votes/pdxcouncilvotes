@@ -105,7 +105,7 @@
     const mCounts = { Yea: 0, Nay: 0 };
     motions.forEach((r) => { if (r[c.name] in mCounts) mCounts[r[c.name]]++; });
     els.banner.append(
-      c.photo ? el("img", { src: c.photo, alt: "", width: "72", height: "72" }) : null,
+      c.photo ? el("img", { src: c.photo, alt: "", width: "104", height: "104" }) : null,
       el("div", {},
         el("h2", {}, c.full_name),
         el("p", { class: "meta" }, c.district ? `District ${c.district} councilor` : "",
@@ -117,6 +117,10 @@
       )
     );
   }
+
+  // Short outlet names for thumbnails that have no preview image yet.
+  const OUTLET_SHORT = { "Willamette Week": "WW", "Portland Mercury": "Mercury", "Portland Tribune": "Tribune" };
+  const outletShort = (name) => OUTLET_SHORT[name] || name;
 
   function renderRow(r, focus) {
     const isMotion = r.kind !== "Final vote";
@@ -132,11 +136,18 @@
           el("a", { href: r.url, class: "item-title", target: "_blank", rel: "noopener" }, r.title),
           r.synopsis ? el("p", { class: "synopsis" }, r.synopsis) : null,
           el("p", { class: "meta" }, [r.doc_number, r.type, r.action].filter(Boolean).join(" · ")),
-          r.news.length ? el("ul", { class: "news" },
-            r.news.map((n) => el("li", {},
-              el("a", { href: n.url, target: "_blank", rel: "noopener" }, n.headline),
-              el("span", { class: "outlet" }, " — " + n.outlet)))) : null
         );
+    if (!isMotion && r.news.length) {
+      item.classList.add("has-news");
+      item.prepend(el("ul", { class: "thumbs", "aria-label": "In the news" },
+        r.news.map((n) => el("li", {},
+          el("a", { class: "thumb", href: n.url, target: "_blank", rel: "noopener", title: `${n.headline} (${n.outlet})` },
+            n.image
+              ? el("img", { src: n.image, alt: "", loading: "lazy", referrerpolicy: "no-referrer" })
+              : el("span", { class: "thumb-badge", "aria-hidden": "true" }, outletShort(n.outlet)),
+            el("span", { class: "thumb-caption" }, n.headline),
+            el("span", { class: "thumb-outlet" }, n.outlet))))));
+    }
     const tags = (list, cls) => list.map((t) => el("span", { class: "tag " + cls }, t));
     const cells = [
       el("td", { class: "c-date" }, el("time", { datetime: r.date }, fmtDate(r.date))),

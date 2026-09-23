@@ -25,7 +25,7 @@ A public, searchable site of Portland City Council votes where visitors can:
 | `assets/councilors.json`, `assets/councilors/` | Councilor names, districts, official City portraits (from portland.gov/council). Update if the council changes. |
 | `data/motions.csv` | Every other recorded roll call (amendments, Budget Committee approvals, procedural motions, consent agendas). Generated; never edit by hand. |
 | `data/motion_parents.json`, `data/motion_themes.json` | Themes for motion parents that aren't in votes.csv, and extra subject themes for individual budget motions. |
-| `data/news.csv` | News coverage linked to voted items: `doc_number,outlet,headline,url`. |
+| `data/news.csv` | News coverage linked to voted items: `doc_number,outlet,headline,url,image`. Shown as thumbnails beside the vote in the table (not on the home page, per the user). `image` is the article's og:image, filled by `scripts/fetch_news_images.py` (needs the news sites reachable); blank shows an outlet tile. |
 | `data/votes.csv` | The dataset, one row per major agenda item with a final vote. |
 | `data/meetings.csv` | Progress tracker, one row per meeting: date, agenda URL, `pending`/`done`/`cancelled`, items logged, notes. |
 | `scripts/parse_agenda.py`, `scripts/add_votes.py` | Read an agenda page into structured items; append chosen items to the CSVs. See "How to work through the meetings". |

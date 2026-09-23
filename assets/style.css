@@ -152,7 +152,7 @@ a { color: var(--accent); }
 /* Councilors */
 .districts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
   gap: 16px;
 }
 .district {
@@ -189,8 +189,8 @@ a { color: var(--accent); }
 }
 .person:hover { background: var(--accent-soft); }
 .person img {
-  width: 76px;
-  height: 76px;
+  width: 112px;
+  height: 112px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 6px;
@@ -359,7 +359,7 @@ a { color: var(--accent); }
   border-radius: 10px;
 }
 .councilor-banner[hidden] { display: none; }
-.councilor-banner img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; flex: none; }
+.councilor-banner img { width: 104px; height: 104px; border-radius: 50%; object-fit: cover; flex: none; }
 .councilor-banner h2 { margin: 0; font-size: 1.2rem; }
 .councilor-banner p { margin: 2px 0 0; }
 
@@ -471,8 +471,50 @@ input[type="search"], select {
 .item-title:hover { text-decoration: underline; }
 .synopsis { margin: 4px 0 0; }
 .meta { margin: 4px 0 0; font-size: 0.82rem; color: var(--muted); }
-.news { margin: 6px 0 0; padding-left: 18px; font-size: 0.85rem; }
-.news li { margin: 2px 0; }
+.c-item.has-news { min-width: 420px; max-width: 620px; }
+.thumbs {
+  float: right;
+  list-style: none;
+  margin: 0 0 8px 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 132px;
+}
+.thumb {
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.thumb:hover { border-color: var(--accent); }
+.thumb img, .thumb-badge {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+.thumb-caption {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding: 6px 8px 0;
+  font-size: 0.76rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+.thumb-outlet { display: block; padding: 2px 8px 6px; font-size: 0.7rem; color: var(--muted); }
 
 .tag {
   display: inline-block;
@@ -537,8 +579,9 @@ input[type="search"], select {
 
 /* Phones: each vote becomes a card, councilor votes wrap as labelled chips. */
 @media (max-width: 720px) {
-  .people { grid-template-columns: repeat(3, 1fr); }
-  .person img { width: 64px; height: 64px; }
+  .people { grid-template-columns: repeat(2, 1fr); }
+  .person img { width: 128px; height: 128px; }
+  .person-name { font-size: 1rem; }
   .table-scroll { overflow: visible; max-height: none; background: none; border: 0; }
   .votes thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .votes, .votes tbody { display: block; }
@@ -554,6 +597,9 @@ input[type="search"], select {
   }
   .votes td, .votes tbody tr:last-child td { border: 0; padding: 0; }
   .c-date, .c-item, .c-tags, .c-tally { flex: 1 1 100%; max-width: none; min-width: 0; }
+  .c-item.has-news { min-width: 0; max-width: none; }
+  .thumbs { float: none; margin: 0 0 10px; width: auto; flex-direction: row; overflow-x: auto; }
+  .thumbs li { flex: 0 0 150px; }
   .c-date { color: var(--muted); font-size: 0.85rem; }
   .c-tally::before { content: "Yea–Nay: "; color: var(--muted); font-weight: 400; }
   .votes td.v { padding: 0; font-weight: 600; }

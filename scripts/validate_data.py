@@ -136,8 +136,8 @@ def check_news(errors):
         docs = {r["doc_number"] for r in csv.DictReader(f)}
     with path.open(newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        if reader.fieldnames != ["doc_number", "outlet", "headline", "url"]:
-            errors.append(f"{path.name}: header must be exactly: doc_number,outlet,headline,url")
+        if reader.fieldnames != ["doc_number", "outlet", "headline", "url", "image"]:
+            errors.append(f"{path.name}: header must be exactly: doc_number,outlet,headline,url,image")
             return
         seen = set()
         for line, row in enumerate(reader, start=2):
@@ -150,6 +150,8 @@ def check_news(errors):
                 errors.append(f"{where}: url must start with https://")
             if "oregonlive.com" in row["url"] and not row["url"].endswith("?outputType=amp"):
                 errors.append(f"{where}: OregonLive links must end with ?outputType=amp")
+            if row["image"] and not row["image"].startswith("https://"):
+                errors.append(f"{where}: image must be an https:// URL (or blank)")
             if (row["doc_number"], row["url"]) in seen:
                 errors.append(f"{where}: duplicate link for {row['doc_number']}")
             seen.add((row["doc_number"], row["url"]))

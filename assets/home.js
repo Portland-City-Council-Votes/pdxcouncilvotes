@@ -28,7 +28,7 @@
           const nays = votes.filter((r) => r[c.name] === "Nay").length;
           return el("li", {},
             el("a", { class: "person", href: dataLink("councilor", c.name) },
-              c.photo ? el("img", { src: c.photo, alt: "", width: "96", height: "96", loading: "lazy" }) : null,
+              c.photo ? el("img", { src: c.photo, alt: "", width: "128", height: "128", loading: "lazy" }) : null,
               el("span", { class: "person-name" }, c.full_name),
               el("span", { class: "person-meta" }, `${nays} Nay vote${nays === 1 ? "" : "s"}`)));
         }))
@@ -55,20 +55,6 @@
     });
   }
 
-  function renderNews(votes) {
-    const items = votes.filter((r) => r.news.length)
-      .sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
-    if (!items.length) return;
-    document.getElementById("news-section").hidden = false;
-    document.getElementById("news").append(...items.map((r) => el("li", {},
-      el("p", { class: "news-vote" },
-        el("a", { href: dataLink("q", r.doc_number) }, r.synopsis || r.title),
-        el("span", { class: "meta" }, ` ${fmtDate(r.date)} · ${r.tally.Yea}–${r.tally.Nay}`)),
-      el("ul", { class: "news" }, r.news.map((n) => el("li", {},
-        el("a", { href: n.url, target: "_blank", rel: "noopener" }, n.headline),
-        el("span", { class: "outlet" }, ` — ${n.outlet}`)))))));
-  }
-
   async function load() {
     let data;
     try {
@@ -80,7 +66,6 @@
     renderStats(data.votes, data.motions);
     renderCouncilors(data.votes, data.councilors);
     renderThemes(data.votes, data.motions);
-    renderNews(data.votes);
   }
 
   load();
