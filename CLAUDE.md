@@ -116,6 +116,18 @@ Quote any field that contains a comma. Use Python's `csv` module to write rows r
 - An item "passed to second reading" gets its final vote at a later meeting, where it shows up as a "Second reading agenda item". Log it there.
 - The user expects this to take several sessions. Don't apologize for the pace; report progress plainly.
 
+## Daily bot runs
+
+A scheduled Claude routine runs this once a day in a fresh cloud session. It never publishes directly: it opens (or updates) a pull request that the owner reviews and merges.
+
+1. **Setup.** Work in a clone of `Portland-City-Council-Votes/pdxcouncilvotes`, on a branch `bot/updates`. If a pull request from `bot/updates` is already open, check that branch out and merge the live branch (`claude/workspace-recent-artifact-rywb4a`) into it; otherwise create `bot/updates` fresh from the live branch. Never push to the live branch, never force-push, never merge the pull request.
+2. **New meetings.** Read `agenda/all?committee=950` pages 0 and 1 and add any meeting missing from `data/meetings.csv` as `pending` (mark "Cancelled" ones `cancelled`).
+3. **Process meetings.** For every `pending` meeting with a date on or before today, follow "How to work through the meetings": parse, pick the major items, write synopses and themes by the rules above, `add_votes.py`. Use `--in-progress` only while the meeting has days still to come; once its last day has passed, mark it done (items continued to later meetings get logged there).
+4. **Motions.** Run `scripts/build_motions.py`; add themes to `data/motion_parents.json` if it asks, and subject themes to `data/motion_themes.json` for named budget amendments (see the `data/motions.csv` section).
+5. **News.** For each newly added item, search for news coverage of that vote and add only clear matches, following the `data/news.csv` rules; then run `scripts/fetch_news_images.py`.
+6. **Check.** `python3 scripts/validate_data.py` must pass. Update the Progress section below. Bump the `?v=` tag only if CSS/JS changed.
+7. **Publish for review.** If nothing changed, stop without committing. Otherwise commit, push `bot/updates`, and open or update the pull request into the live branch, titled "Council votes update" with the meeting dates. The body lists each new item (date, document number, title, action, Yea–Nay), its themes, every judgment call (items skipped and why, anything uncertain), and anything that needs the owner's decision.
+
 ## Progress
 
 `data/meetings.csv` is the source of truth. As of Sept 23, 2026:
