@@ -528,6 +528,8 @@ input[type="search"], select {
 .votes tr.is-motion td { background: color-mix(in srgb, var(--bg) 45%, var(--surface)); }
 .item-title:hover { text-decoration: underline; }
 .synopsis { margin: 4px 0 0; }
+.report { display: inline-block; margin-top: 4px; font-size: 0.78rem; color: var(--muted); }
+.report:hover { color: var(--accent); }
 .meta { margin: 4px 0 0; font-size: 0.82rem; color: var(--muted); }
 .c-item.has-news { min-width: 420px; max-width: 620px; }
 .thumbs {

@@ -148,8 +148,21 @@
     return isNaN(d) ? iso : d.toLocaleDateString("en-US", opts || { year: "numeric", month: "short", day: "numeric" });
   };
 
+  // Error reports go to GitHub Issues through the form in .github/ISSUE_TEMPLATE/report-error.yml.
+  const REPO = "https://github.com/Portland-City-Council-Votes/pdxcouncilvotes";
+  function reportLink(vote) {
+    const params = { template: "report-error.yml" };
+    if (vote) {
+      const what = vote.motion ? `${vote.kind}: "${vote.motion.replace(/:\s*Moved by.*$/, "")}" on ${vote.item}` : vote.title;
+      const label = [vote.doc_number, vote.date, what].filter(Boolean).join(" · ");
+      params.title = "Report: " + [vote.doc_number, (vote.title || vote.item || "").slice(0, 70)].filter(Boolean).join(" ");
+      params.vote = label.slice(0, 250);
+    }
+    return REPO + "/issues/new?" + new URLSearchParams(params).toString();
+  }
+
   // Links into the full data page with a filter applied.
   const dataLink = (key, value) => "data.html#" + new URLSearchParams({ [key]: value }).toString();
 
-  window.PCV = { parseCSV, splitList, loadAll, fetchJSON, themeIcon, el, fmtDate, dataLink };
+  window.PCV = { parseCSV, splitList, loadAll, fetchJSON, themeIcon, el, fmtDate, dataLink, reportLink };
 })();

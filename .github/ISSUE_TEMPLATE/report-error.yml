@@ -1,0 +1,41 @@
+name: Report an error or missing vote
+description: Something on the site is wrong, missing, or out of date.
+title: "Report: "
+labels: ["data-report"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping keep this accurate. Reports are public on GitHub. A link to an official source (a portland.gov agenda or document page) makes a fix much faster.
+  - type: dropdown
+    id: problem
+    attributes:
+      label: What's wrong?
+      options:
+        - A councilor's vote is wrong
+        - A vote is missing
+        - The summary or theme is wrong or misleading
+        - A news link is wrong or broken
+        - A budget figure is wrong
+        - Something else
+    validations:
+      required: true
+  - type: input
+    id: vote
+    attributes:
+      label: Which vote?
+      description: Document number (like 2026-149), date and title, if it's about a specific vote.
+      placeholder: "2026-149 · Jun 4, 2026 · Add Code to prohibit the sale..."
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: What's wrong, and what should it say instead?
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source (optional)
+      description: A link that shows the correct information.
+      placeholder: https://www.portland.gov/council/agenda/...

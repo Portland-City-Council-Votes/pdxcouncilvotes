@@ -4,7 +4,7 @@
 (function () {
   "use strict";
 
-  const { loadAll, el, fmtDate } = window.PCV;
+  const { loadAll, el, fmtDate, reportLink } = window.PCV;
   const VOTE_ABBR = { Yea: "Y", Nay: "N", Absent: "A", Abstain: "Ab" };
   const FILTER_IDS = ["q", "theme", "show", "councilor", "vote", "sort", "contested"];
   const WIDE = ["Citywide", "Not specified in agenda"];
@@ -132,11 +132,13 @@
           r.note ? el("p", { class: "note" }, r.note) : null,
           el("p", { class: "meta" }, "On: ",
             el("a", { href: r.url, target: "_blank", rel: "noopener" }, r.item),
-            r.doc_number ? ` (${r.doc_number})` : ""))
+            r.doc_number ? ` (${r.doc_number})` : ""),
+          el("a", { class: "report", href: reportLink(r), target: "_blank", rel: "noopener" }, "Report an error"))
       : el("td", { class: "c-item" },
           el("a", { href: r.url, class: "item-title", target: "_blank", rel: "noopener" }, r.title),
           r.synopsis ? el("p", { class: "synopsis" }, r.synopsis) : null,
           el("p", { class: "meta" }, [r.doc_number, r.type, r.action].filter(Boolean).join(" · ")),
+          el("a", { class: "report", href: reportLink(r), target: "_blank", rel: "noopener" }, "Report an error"),
         );
     if (!isMotion && r.news.length) {
       item.classList.add("has-news");
