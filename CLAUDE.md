@@ -93,4 +93,10 @@ Quote any field that contains a comma. Use Python's `csv` module to write rows r
 
 ## Progress
 
-An earlier session (outside this repo) processed Sept 9, 16 and 23, 2026 and logged 9 items, but that data was lost with its container, so those meetings are back to `pending`. The full meeting list is in place; no meetings are finished yet. `data/meetings.csv` is the current state.
+Working newest to oldest. `data/meetings.csv` is the source of truth; as of the last update:
+
+- **Done:** Sept 2, 9 and 16, 2026 (9 items logged in total across September).
+- **In progress:** Sept 23-24, 2026. Items 2026-277 and 2026-301 are logged; the rest (2026-278, 263 reconsideration, 186, 212, 300, 311, 312) had no final vote yet. Re-run it once the meeting is over; `add_votes.py` refuses duplicates.
+- **Next up:** Aug 12, 2026, then back through the list to Jan 2, 2025.
+- An earlier session (outside this repo) processed Sept 9-23 and lost its data; that work has been redone here.
+- Known edge case: 2026-222 (July 22, 2026) failed 6-6 with Mayor Wilson breaking the tie by voting Nay. Log it with a `note`.
