@@ -21,6 +21,7 @@ A public, searchable site of Portland City Council votes where visitors can:
 | `index.html`, `assets/` | The site. Councilor columns come from the CSV header, so the page needs no change when data is added. |
 | `data/votes.csv` | The dataset, one row per major agenda item with a final vote. |
 | `data/meetings.csv` | Progress tracker, one row per meeting: date, agenda URL, `pending`/`done`/`cancelled`, items logged, notes. |
+| `scripts/parse_agenda.py`, `scripts/add_votes.py` | Read an agenda page into structured items; append chosen items to the CSVs. See "How to work through the meetings". |
 | `scripts/validate_data.py` | Schema check for both CSVs. Run `python3 scripts/validate_data.py` before every commit that touches `data/`; CI runs it too. |
 
 Preview locally with `python3 -m http.server` and open http://localhost:8000 (opening `index.html` as a file won't load the CSV).
@@ -68,9 +69,11 @@ Morillo,Avalos,Ryan,Pirtle-Guiney,Zimmerman,Dunphy,Smith,Green,Clark,Kanal,Novic
 - **synopsis**: one or two plain-language sentences on what the item does. Written by Claude; keep it neutral and factual.
 - **type**: `Ordinance`, `Emergency ordinance`, `Resolution` or `Report`.
 - **action**: the "Council action" field copied word for word (Passed, Passed as amended, Failed to pass, Adopted, Adopted as amended, Postponed, Referred, …).
-- **theme**: assigned by Claude, not an official City category. Several themes go in one field separated by `; `. Reuse existing theme names; add a new one only when nothing fits.
+- **theme**: assigned by Claude, not an official City category. One or more of the fixed list below, separated by `; ` (e.g. `Public Safety; Transportation`). The list lives in `THEMES` in `scripts/add_votes.py` and both scripts enforce it; add a theme there only when nothing fits, and mention it to the user.
+  - Housing · Homelessness · Public Safety · Transportation · Budget & Taxes · Environment & Energy · Economic Development · Land Use & Planning · Utilities (water, sewer, solid waste rates) · Parks & Recreation · Arts & Culture · Health & Social Services · Civil Rights & Equity · Government Operations · Government Transparency
 - **neighborhood**: from the agenda page's own "Neighborhood" tag(s), several separated by `; `. If it lists all six areas (North/South/Northeast/Northwest/Southeast/Southwest), use `Citywide`. If the page has no neighborhood tag, use `Not specified in agenda`. Never guess a neighborhood from the item's subject.
 - **url**: the agenda page (or the item's own page) on portland.gov.
+- **Mayor tie-breaks**: the Mayor votes only to break a 6–6 tie. There is no Mayor column; say so in the synopsis (e.g. "Mayor Wilson broke a 6–6 tie by voting Nay.") via the pick's `note`.
 - **councilor columns**: `Yea`, `Nay`, `Absent` or `Abstain` (the agenda's "Aye" is recorded as "Yea"). Leave blank only if the page truly doesn't say.
 
 Quote any field that contains a comma. Use Python's `csv` module to write rows rather than building lines by hand.
@@ -80,8 +83,12 @@ Quote any field that contains a comma. Use Python's `csv` module to write rows r
 - `data/meetings.csv` lists every full-council meeting since the 12-member council's first meeting on Jan 2, 2025 (66 as of Sept 23, 2026; Nov 5, 2025 was cancelled). Use its `url` column rather than building URLs from dates: some differ (e.g. `2025/11/12-0`). Add new meetings from the `agenda/all` listing as they appear.
 - Many meetings run over two or more days on one agenda page (e.g. "September 23-24, 2026"). In `votes.csv`, `date` is the day the vote happened when the page shows it, otherwise the meeting's first day.
 - The listing pages sometimes return "The website encountered an unexpected error"; wait a few seconds and retry.
-- Fetch one agenda page at a time and read it carefully; the reading is the slow part, not the fetch.
-- After each meeting: append its rows to `data/votes.csv`, mark it `done` with `items_logged`, run the validator, then commit and push. Small commits mean nothing is lost if a session ends.
+- For each meeting:
+  1. `python3 scripts/parse_agenda.py <url> --json /tmp/m.json` prints every item with its type, final action, neighborhood and final vote (votes on amendments are ignored). It takes the votes straight from the page, so never retype them by hand.
+  2. Decide which items are major, then write a picks file mapping each chosen document number to `{"synopsis": ..., "theme": ...}` (plus `note` for a Mayor tie-break).
+  3. `python3 scripts/add_votes.py <meeting date> /tmp/m.json picks.json` appends the rows and marks the meeting done. Add `--in-progress` if the meeting hasn't finished yet (it stays pending and can be re-run for the remaining items later).
+  4. `python3 scripts/validate_data.py`, then commit and push. Small commits mean nothing is lost if a session ends.
+- An item "passed to second reading" gets its final vote at a later meeting, where it shows up as a "Second reading agenda item". Log it there.
 - The user expects this to take several sessions. Don't apologize for the pace; report progress plainly.
 
 ## Progress

@@ -11,6 +11,8 @@ import sys
 from datetime import date
 from pathlib import Path
 
+from add_votes import THEMES
+
 ROOT = Path(__file__).resolve().parent.parent
 
 META_COLUMNS = [
@@ -53,6 +55,9 @@ def check_votes(errors):
             for col in ("doc_number", "title", "action", "theme", "neighborhood"):
                 if not row[col].strip():
                     errors.append(f"{where}: {col} is empty")
+            bad_themes = [t for t in row["theme"].split("; ") if t not in THEMES]
+            if bad_themes:
+                errors.append(f"{where}: unknown theme(s) {bad_themes}; see THEMES in scripts/add_votes.py")
             if row["type"] not in TYPES:
                 errors.append(f"{where}: type {row['type']!r} not one of {sorted(TYPES)}")
             if not AGENDA_URL.match(row["url"]):
