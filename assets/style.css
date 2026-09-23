@@ -107,9 +107,24 @@ a { color: var(--accent); }
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.site-nav .nav-report {
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 5px 12px;
+  white-space: nowrap;
+}
+.site-nav .nav-report:hover { background: var(--accent-soft); }
 @media (max-width: 480px) {
-  .site-nav .wrap { flex-wrap: nowrap; gap: 14px; }
-  .site-nav a { font-size: 0.9rem; }
+  .site-nav .wrap { gap: 0 12px; }
+  .site-nav a { font-size: 0.9rem; padding: 10px 0; white-space: nowrap; }
+  .site-nav .brand { flex-basis: 100%; padding-bottom: 0; }
+  .site-nav .nav-report { padding: 3px 9px; margin-left: auto; }
+  .site-nav .nav-report .long { display: none; }
+}
+@media (max-width: 340px) {
+  .site-nav .wrap { gap: 0 10px; }
+  .site-nav a { font-size: 0.84rem; }
 }
 
 /* Headers */
@@ -341,12 +356,12 @@ a { color: var(--accent); }
 }
 .as-table { margin-top: 12px; }
 .as-table summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 0.9rem; }
-.mini-table { margin-top: 8px; border-collapse: collapse; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
+.mini-table { display: block; max-width: 100%; overflow-x: auto; margin-top: 8px; border-collapse: collapse; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
 .mini-table th, .mini-table td { padding: 4px 12px 4px 0; border-bottom: 1px solid var(--rule); text-align: left; }
 .mini-table td { text-align: right; }
 .mini-table tfoot th, .mini-table tfoot td { font-weight: 700; border-bottom: 0; }
 .chart-source { margin: 10px 0 0; font-size: 0.8rem; color: var(--muted); }
-.vote-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-bottom: 12px; }
+.vote-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 12px; margin-bottom: 12px; }
 .vote-card { padding: 14px; border: 1px solid var(--rule); border-radius: 8px; }
 .vote-card h3 { margin: 0; font-size: 1rem; }
 .vote-card p { margin: 6px 0 0; }
