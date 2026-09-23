@@ -137,15 +137,17 @@
   }
 
   function renderNews(votes) {
-    const items = votes.flatMap((r) => r.news.map((n) => ({ ...n, vote: r })))
-      .sort((a, b) => b.vote.date.localeCompare(a.vote.date)).slice(0, 8);
+    const items = votes.filter((r) => r.news.length)
+      .sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
     if (!items.length) return;
     document.getElementById("news-section").hidden = false;
-    document.getElementById("news").append(...items.map((n) => el("li", {},
-      el("a", { href: n.url, target: "_blank", rel: "noopener" }, n.headline),
-      el("span", { class: "outlet" }, ` — ${n.outlet}`),
-      el("p", { class: "meta" }, "About: ",
-        el("a", { href: dataLink("q", n.vote.doc_number) }, n.vote.title), ` (${fmtDate(n.vote.date)})`))));
+    document.getElementById("news").append(...items.map((r) => el("li", {},
+      el("p", { class: "news-vote" },
+        el("a", { href: dataLink("q", r.doc_number) }, r.synopsis || r.title),
+        el("span", { class: "meta" }, ` ${fmtDate(r.date)} · ${r.tally.Yea}–${r.tally.Nay}`)),
+      el("ul", { class: "news" }, r.news.map((n) => el("li", {},
+        el("a", { href: n.url, target: "_blank", rel: "noopener" }, n.headline),
+        el("span", { class: "outlet" }, ` — ${n.outlet}`)))))));
   }
 
   async function load() {

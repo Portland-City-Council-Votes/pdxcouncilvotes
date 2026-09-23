@@ -302,13 +302,15 @@ a { color: var(--accent); }
 
 /* News */
 .news-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-.news-list li {
+.news-list > li {
   background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: 8px;
   padding: 12px 14px;
 }
-.news-list > li > a { font-weight: 600; }
+.news-vote { margin: 0; }
+.news-vote > a { font-weight: 600; color: var(--text); text-decoration: none; }
+.news-vote > a:hover { text-decoration: underline; }
 .outlet { color: var(--muted); font-size: 0.88rem; }
 
 /* Data page: councilor banner */
