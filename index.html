@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Portland Council Votes</title>
   <meta name="description" content="See how Portland's 12 city councilors voted since January 2025. Explore by councilor or theme.">
-  <link rel="stylesheet" href="assets/style.css?v=20260923b">
+  <link rel="stylesheet" href="assets/style.css?v=20260923c">
 </head>
 <body>
   <nav class="site-nav">
@@ -28,8 +28,15 @@
 
   <main class="wrap">
     <section class="explore" aria-labelledby="h-councilors">
-      <h2 id="h-councilors">By councilor</h2>
-      <p class="section-lede">Choose a councilor to see every vote they cast.</p>
+      <h2 id="h-councilors">View Votes By Councilor</h2>
+      <form class="find-district" id="find-district" role="search" aria-label="Find your district">
+        <label for="address" class="sr-only">Your street address</label>
+        <div class="find-row">
+          <input type="search" id="address" name="address" placeholder="Enter your address" autocomplete="street-address" required>
+          <button type="submit" class="button">Find</button>
+        </div>
+        <p class="find-result" id="find-result" aria-live="polite"></p>
+      </form>
       <div id="councilors" class="districts"></div>
     </section>
 
@@ -50,11 +57,11 @@
   </main>
 
   <footer class="site-footer wrap">
-    <p>Source: meeting agendas at <a href="https://www.portland.gov/council/agenda/all?committee=950">portland.gov/council</a>. Councilor photos are official City of Portland portraits. Synopses, themes and the choice of which items count as “major” are this site’s own editorial calls.</p>
+    <p>Source: meeting agendas at <a href="https://www.portland.gov/council/agenda/all?committee=950">portland.gov/council</a>. Councilor photos are official City of Portland portraits. District boundaries: City of Portland Elections Office. Address search: © OpenStreetMap contributors (Nominatim); addresses you enter are sent there to be located and aren’t stored by this site. Synopses, themes and the choice of which items count as “major” are this site’s own editorial calls.</p>
     <p><a href="data.html">View all data</a> · <a href="data/votes.csv" download>Download the dataset (CSV)</a></p>
   </footer>
 
-  <script src="assets/common.js?v=20260923b"></script>
-  <script src="assets/home.js?v=20260923b"></script>
+  <script src="assets/common.js?v=20260923c"></script>
+  <script src="assets/home.js?v=20260923c"></script>
 </body>
 </html>

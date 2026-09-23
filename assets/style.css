@@ -152,6 +152,45 @@ a { color: var(--accent); }
 .section-lede { margin: 4px 0 18px; color: var(--muted); max-width: 70ch; }
 
 /* Councilors */
+/* Address -> district finder */
+.find-district {
+  margin: 12px 0 18px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+}
+.find-district label { display: block; font-weight: 700; margin-bottom: 8px; }
+.find-row { display: flex; gap: 8px; }
+.find-row input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: inherit;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.find-row .button { margin: 0; border: 0; font: inherit; font-weight: 600; cursor: pointer; }
+.find-result { margin: 10px 0 0; min-height: 1.5em; }
+.find-result:empty { display: none; }
+.find-result.is-found { font-size: 1.05rem; }
+.find-result.is-error { color: var(--split); }
+.find-note { margin: 8px 0 0; font-size: 0.8rem; color: var(--muted); }
+.district.is-mine { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent); }
+.district:focus { outline: none; }
+.mine-tag {
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: none;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
 /* Two districts per row on wide screens: 1 and 2 on top, 3 and 4 below. */
 .districts {
   display: grid;
@@ -160,21 +199,6 @@ a { color: var(--accent); }
 }
 @media (max-width: 820px) {
   .districts { grid-template-columns: 1fr; }
-}
-.election-key {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: -8px 0 14px;
-  font-size: 0.9rem;
-  color: var(--muted);
-}
-.ring-sample {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px var(--election);
-  flex: none;
 }
 .up-tag {
   margin-left: 8px;
