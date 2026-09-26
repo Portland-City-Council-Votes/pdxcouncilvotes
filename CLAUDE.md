@@ -132,11 +132,11 @@ A scheduled Claude routine runs this once a day in a fresh cloud session. It nev
 
 ## Progress
 
-`data/meetings.csv` is the source of truth. As of Sept 23, 2026:
+`data/meetings.csv` is the source of truth. As of Sept 25, 2026:
 
-- **Done:** every meeting from Jan 2, 2025 through Sept 16, 2026 (64 meetings, 199 major items, 69 of them split votes).
-- **Motions:** 338 roll calls across all 65 held meetings (Jan 2025 - Sept 2026) are in `data/motions.csv`.
-- **In progress:** Sept 23-24, 2026. Items 2026-277 and 2026-301 are logged; the rest (2026-278, 263 reconsideration, 186, 212, 300, 311, 312) had no final vote yet. Re-run it once the meeting is over; `add_votes.py` refuses duplicates.
+- **Done:** every meeting from Jan 2, 2025 through Sept 23-24, 2026 (65 held meetings, 200 major items, 70 of them split votes).
+- **Motions:** 343 roll calls across all 65 held meetings (Jan 2025 - Sept 2026) are in `data/motions.csv`.
+- **Pending:** Sept 30-Oct 1, 2026 (hasn't happened yet).
 - **Ongoing:** add new meetings from the `agenda/all` listing as they happen.
-- Mayor tie-break so far: 2026-222 (July 22, 2026), logged with a note in its synopsis.
+- Mayor tie-breaks so far: 2026-222 (July 22, 2026) and 2026-263 (Sept 23, 2026, on reconsideration of the Zenith Energy franchise transfer, which had failed 5-6 with one absence on Sept 16). Both are logged with a note in their synopsis; 2026-263's row is dated Sept 23 (the reconsideration, its true final vote) rather than Sept 16.
 - 2025-207 (June 4, 2025) was a vote to remand the Children's Levy recommendations; Yea means "send it back". The synopsis says so.
