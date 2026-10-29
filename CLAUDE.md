@@ -132,12 +132,12 @@ A scheduled Claude routine runs this once a day in a fresh cloud session. It nev
 
 ## Progress
 
-`data/meetings.csv` is the source of truth. As of Oct 23, 2026:
+`data/meetings.csv` is the source of truth. As of Oct 29, 2026:
 
 - **Done:** every meeting from Jan 2, 2025 through Oct 21-22, 2026 (69 held meetings, 216 major items).
-- **Motions:** 357 roll calls across all held meetings (Jan 2025 - Oct 2026) are in `data/motions.csv`.
+- **Motions:** 360 roll calls across all held meetings (Jan 2025 - Oct 2026) are in `data/motions.csv`.
 - **Oct 21-22, 2026:** logged 2026-345, 327, 333, 362, 309 and 367 (Oct 22). Skipped 2026-363 (appointments). 2026-123, 366 and 368 passed to second reading (log at their final vote). Still unlogged from earlier: 343, 347.
-- **Pending:** Oct 28, 2026.
+- **In progress:** Oct 28-29, 2026. Logged 2026-123 (firearms in City buildings, 12-0) and 2026-286 (firefighters resolution, 12-0). 2026-365 passed to second reading; 2026-372 continued as amended; 2026-366, 368, 343, 364 and 375 await Oct 29 votes.
 - **Ongoing:** add new meetings from the `agenda/all` listing as they happen.
 - Mayor tie-breaks so far: 2026-222 (July 22, 2026) and 2026-263 (Sept 23, 2026, on reconsideration of the Zenith Energy franchise transfer, which had failed 5-6 with one absence on Sept 16). Both are logged with a note in their synopsis; 2026-263's row is dated Sept 23 (the reconsideration, its true final vote) rather than Sept 16.
 - 2025-207 (June 4, 2025) was a vote to remand the Children's Levy recommendations; Yea means "send it back". The synopsis says so.
