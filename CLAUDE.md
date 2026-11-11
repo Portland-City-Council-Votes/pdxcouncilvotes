@@ -132,12 +132,12 @@ A scheduled Claude routine runs this once a day in a fresh cloud session. It nev
 
 ## Progress
 
-`data/meetings.csv` is the source of truth. As of Oct 29, 2026:
+`data/meetings.csv` is the source of truth. As of Nov 11, 2026:
 
-- **Done:** every meeting from Jan 2, 2025 through Oct 21-22, 2026 (69 held meetings, 216 major items).
-- **Motions:** 360 roll calls across all held meetings (Jan 2025 - Oct 2026) are in `data/motions.csv`.
-- **Oct 21-22, 2026:** logged 2026-345, 327, 333, 362, 309 and 367 (Oct 22). Skipped 2026-363 (appointments). 2026-123, 366 and 368 passed to second reading (log at their final vote). Still unlogged from earlier: 343, 347.
-- **Done through:** Oct 28-29, 2026. **In progress:** Nov 4-5, 2026 (2026-365 and 364 logged). Still to log at their final votes: 2026-344, 393, 371, 387 (second reading), 308, 311/312, 372 and 343.
+- **Done:** every meeting from Jan 2, 2025 through Nov 4-5, 2026 (71 held meetings, 224 major items, 74 of them split votes).
+- **Motions:** 360 roll calls across all held meetings (Jan 2025 - Nov 2026) are in `data/motions.csv`.
+- **Nov 4-5, 2026:** logged 2026-365, 364 and 347 (Hillsdale appeal, findings adopted Nov 5). Still to log at their final votes: 2026-344, 393, 371, 387 (passed to second reading Nov 4), 311/312 and 343 (passed to second reading as amended Nov 5), 308 (postponed). 2026-372 (continued from Oct 29) does not appear on the Nov 4-5 page; watch for it.
+- **Pending:** Nov 12, 2026.
 - **Ongoing:** add new meetings from the `agenda/all` listing as they happen.
 - Mayor tie-breaks so far: 2026-222 (July 22, 2026) and 2026-263 (Sept 23, 2026, on reconsideration of the Zenith Energy franchise transfer, which had failed 5-6 with one absence on Sept 16). Both are logged with a note in their synopsis; 2026-263's row is dated Sept 23 (the reconsideration, its true final vote) rather than Sept 16.
 - 2025-207 (June 4, 2025) was a vote to remand the Children's Levy recommendations; Yea means "send it back". The synopsis says so.
