@@ -135,9 +135,9 @@ A scheduled Claude routine runs this once a day in a fresh cloud session. It nev
 `data/meetings.csv` is the source of truth. As of Nov 19, 2026:
 
 - **Done:** every meeting from Jan 2, 2025 through Nov 12, 2026 (72 held meetings, 232 major items, 75 of them split votes).
-- **Motions:** 376 roll calls across all held meetings (Jan 2025 - Nov 2026) are in `data/motions.csv`.
+- **Motions:** 378 roll calls across all held meetings (Jan 2025 - Nov 2026) are in `data/motions.csv`.
 - **Nov 12, 2026:** logged 2026-311, 312, 343, 393, 387, 371 (second readings), 386 and 412. Still to log at their final votes: 2026-372 (continued as amended again), 2026-344 (pulled from the consent agenda, no vote), 2026-411 (referred back to the Mayor's office), 2026-308 (postponed Nov 4).
-- **Pending:** Nov 18-19, 2026 (in progress on Nov 19). Nov 18 had no final votes on major items: 2026-401 and 400 (eminent domain, PBOT) passed to second reading; 2026-372 continued as amended (Kanal 5 and Pirtle-Guiney 1 both failed 4-6, in motions.csv); 2026-348 (CEO Pay Ratio Surtax) continued. Nov 19 items 2026-396 and 346 had no action yet.
+- **Pending:** Nov 18-19, 2026 (both days held). Nov 18 had no final votes on major items: 2026-401 and 400 (eminent domain, PBOT) passed to second reading; 2026-372 continued as amended to Dec 2 (Kanal 5 and Pirtle-Guiney 1 both failed 4-6, in motions.csv); 2026-348 (CEO Pay Ratio Surtax) continued to Dec 2. Nov 19: 2026-346 passed to second reading (Dec 2); 2026-396 (Investment Policy) shows a final roll call (Aye 7: Green, Avalos, Kanal, Pirtle-Guiney, Koyama Lane, Morillo, Dunphy; Nay 2: Clark, Ryan; Absent 3) but the page has no "Council action" yet, so it isn't logged. The meeting stays pending until that field appears; then log 2026-396 and mark it done.
 - **Ongoing:** add new meetings from the `agenda/all` listing as they happen.
 - Mayor tie-breaks so far: 2026-222 (July 22, 2026) and 2026-263 (Sept 23, 2026, on reconsideration of the Zenith Energy franchise transfer, which had failed 5-6 with one absence on Sept 16). Both are logged with a note in their synopsis; 2026-263's row is dated Sept 23 (the reconsideration, its true final vote) rather than Sept 16.
 - 2025-207 (June 4, 2025) was a vote to remand the Children's Levy recommendations; Yea means "send it back". The synopsis says so.
