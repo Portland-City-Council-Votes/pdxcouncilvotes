@@ -132,7 +132,7 @@ A scheduled Claude routine runs this once a day in a fresh cloud session. It nev
 
 ## Progress
 
-`data/meetings.csv` is the source of truth. As of Nov 22, 2026:
+`data/meetings.csv` is the source of truth. As of Nov 25, 2026 (no Nov 25-26 meeting on the listing; next is Dec 2):
 
 - **Done:** every meeting from Jan 2, 2025 through Nov 18-19, 2026 (73 held meetings, 233 major items, 76 of them split votes).
 - **Motions:** 378 roll calls across all held meetings (Jan 2025 - Nov 2026) are in `data/motions.csv`.
