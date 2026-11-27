@@ -132,11 +132,12 @@ A scheduled Claude routine runs this once a day in a fresh cloud session. It nev
 
 ## Progress
 
-`data/meetings.csv` is the source of truth. As of Sept 23, 2026:
+`data/meetings.csv` is the source of truth. As of Nov 27, 2026 (Dec 2-3 added as pending; it is the next meeting):
 
-- **Done:** every meeting from Jan 2, 2025 through Sept 16, 2026 (64 meetings, 199 major items, 69 of them split votes).
-- **Motions:** 338 roll calls across all 65 held meetings (Jan 2025 - Sept 2026) are in `data/motions.csv`.
-- **In progress:** Sept 23-24, 2026. Items 2026-277 and 2026-301 are logged; the rest (2026-278, 263 reconsideration, 186, 212, 300, 311, 312) had no final vote yet. Re-run it once the meeting is over; `add_votes.py` refuses duplicates.
+- **Done:** every meeting from Jan 2, 2025 through Nov 18-19, 2026 (73 held meetings, 233 major items, 76 of them split votes).
+- **Motions:** 378 roll calls across all held meetings (Jan 2025 - Nov 2026) are in `data/motions.csv`.
+- **Nov 12, 2026:** logged 2026-311, 312, 343, 393, 387, 371 (second readings), 386 and 412. Still to log at their final votes: 2026-372 (continued as amended again), 2026-344 (pulled from the consent agenda, no vote), 2026-411 (referred back to the Mayor's office), 2026-308 (postponed Nov 4).
+- **Nov 18-19, 2026 (done):** logged 2026-396 (Investment Policy, Adopted as amended, 7-2; Clark and Ryan Nay). Still to log at their final votes on Dec 2: 2026-401 and 400 (eminent domain, PBOT) and 2026-346 (second readings); 2026-372 (continued as amended) and 2026-348 (CEO Pay Ratio Surtax, continued).
 - **Ongoing:** add new meetings from the `agenda/all` listing as they happen.
-- Mayor tie-break so far: 2026-222 (July 22, 2026), logged with a note in its synopsis.
+- Mayor tie-breaks so far: 2026-222 (July 22, 2026) and 2026-263 (Sept 23, 2026, on reconsideration of the Zenith Energy franchise transfer, which had failed 5-6 with one absence on Sept 16). Both are logged with a note in their synopsis; 2026-263's row is dated Sept 23 (the reconsideration, its true final vote) rather than Sept 16.
 - 2025-207 (June 4, 2025) was a vote to remand the Children's Levy recommendations; Yea means "send it back". The synopsis says so.
